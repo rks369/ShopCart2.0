@@ -1,0 +1,30 @@
+:root {
+  --primary-color: #06bfad;
+  --secondary-color: #f4a640;
+  --light-color: #daeef7;
+  
+}
+
+#bg_img {
+  width: 75vw;
+  margin: auto;
+  object-fit: contain;
+  display: block;
+}
+
+#navbar{
+  font-family: "Labrada";
+  font-size: 1.3rem;
+  font-weight: 300;
+}
+
+
+
+.navbar-brand{
+  font-family: "Satisfy";
+  font-size: 1.5rem;
+  font-weight: 300;
+
+}
+
+
