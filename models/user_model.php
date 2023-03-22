@@ -9,15 +9,17 @@ class User
     public string $email;
     public string $mobile;
     public string $password;
+    public string $status;
 
 
     public function __construct(array $data)
     {
-        $this->id=$data['id']??'-1';
+        $this->id = $data['id'] ?? '-1';
         $this->name = $data['name'] ?? '';
         $this->email = $data['email'] ?? '';
         $this->mobile = $data['modile'] ?? '';
         $this->password = $data['password'] ?? '';
+        $this->status = $data['status'] ?? '';
     }
 
 

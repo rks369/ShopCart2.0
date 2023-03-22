@@ -1,8 +1,27 @@
 <?php
 require_once('models/user_model.php');
 
+
+
 class UserController
 {
+    static function getLoginPage()
+    {
+        require_once('views/user/login.php');
+    }
+    static function getSignUpPage()
+    {
+        require_once('views/user/signup.php');
+    }
+    static function getChangePasswordPage()
+    {
+        authCheck();
+        require_once('views/user/change_password.php');
+    }
+    static function getForgotPasswordPage()
+    {
+        require_once('views/user/login.php');
+    }
     static function signUp()
     {
 
@@ -29,7 +48,7 @@ class UserController
 
             $result = $userModel->addUser($userDetails);
             if ($result) {
-                $_SESSION['id'] = -1;
+                $_SESSION['id'] = $user['status'] == '1' ? $user['id'] : '-1';
                 $_SESSION['name'] = $userDetails['name'];
                 $response->msg = 'Done';
                 $response->data = 'User Added Sucessfully!!!';
@@ -60,8 +79,8 @@ class UserController
         $user = $userModel->getUser($body->email);
 
         if ($user && $user->password === $userDetails['password']) {
-            $_SESSION['id']=$user->id;
-            $_SESSION['name']=$user->name;
+            $_SESSION['id'] = $user->id;
+            $_SESSION['name'] = $user->name;
             $response->msg = 'Done';
             $response->data = $user->toArray();
         } else {
@@ -74,8 +93,9 @@ class UserController
         echo json_encode($response);
     }
 
-    static function logout(){
+    static function logout()
+    {
         session_destroy();
-        header('Location: '.'./');
+        header('Location: ' . './');
     }
 }

@@ -34,5 +34,5 @@ include('views/partials/header.php'); ?>
     </div>
 </div>
 <script src="/change_password.js"></script>
-<?
+<?php
 include('views/partials/tail.php');
