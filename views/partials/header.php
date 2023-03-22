@@ -19,8 +19,8 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#">Order History</a></li>
-                            <li><a class="dropdown-item" href="change_password.php">Chnage Password</a></li>
-                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                            <li><a class="dropdown-item" href="change_password">Chnage Password</a></li>
+                            <li><a class="dropdown-item" href="logout">Logout</a></li>
                         </ul>
                     </li>
                 <?php } else { ?>

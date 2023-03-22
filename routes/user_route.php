@@ -1,12 +1,7 @@
 <?php
-require_once('models/user_model.php');
+require_once('controllers/user_controller.php');
 $router->get('/login', function () {
-    if (isset($_SESSION['user_id'])) {
-        echo "Logged in";
-    } else {
-
-        include('views/user/login.php');
-    }
+    require_once('views/user/login.php');
 });
 
 $router->get('/signup', function () {
@@ -14,6 +9,7 @@ $router->get('/signup', function () {
 });
 
 $router->get('/change_password', function () {
+    authCheck();
     include('views/user/change_password.php');
 });
 
@@ -22,13 +18,14 @@ $router->get('/forgot_password', function () {
 });
 
 $router->post('/signup', function ($request) {
-    $body =  file_get_contents('php://input');
-    $body = json_decode($body);
+    UserController::signUp();
+});
 
-    $userModel = new UserModel();
+$router->post('/login', function ($request) {
+    UserController::login();
+});
 
-    $result = $userModel->addUser($body->name,$body->email,$body->mobile,$body->password);
-    
-    $_SESSION['id']=4;
-    return json_encode("{msg:'sucess',data:$result}");
+
+$router->get('/logout', function ($request) {
+    UserController::logout();
 });

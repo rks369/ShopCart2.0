@@ -78,14 +78,11 @@ loginBtn.addEventListener('click', function (event) {
       body: JSON.stringify(user)
     }).then(response => response.json())
       .then(function (result) {
-        if (result['err'] == 'Verify Email First') {
-          window.location.href = './verifyMailFirst';
+        if (result['msg'] == 'Done') {
+          window.location.href = './';
           
-        } else if (result['err']) {
-          errorSpan.innerHTML = result['err'];
-        } else {
-          console.log(result)
-          window.location.href = './products';
+        } else if (result['msg']=='Error') {
+          errorSpan.innerHTML = result['data'];
         }
       });
   }

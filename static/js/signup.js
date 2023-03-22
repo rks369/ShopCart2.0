@@ -87,13 +87,13 @@ signUpBtn.addEventListener("click", function (event) {
       .then((response) => response.json())
       .then(function (result) {
         console.log(result)
-        if(result['err'])
+        if(result['msg']=='Error')
         {
-          errorSpan.innerHTML = result['err'];
+          errorSpan.innerHTML = result['data'];
 
         }else
-        if (result["data"] == "done") {
-          window.location.href = "./verifyMailFirst";
+        if (result["msg"] == "Done") {
+          window.location.href = "./";
         } 
       });
   }

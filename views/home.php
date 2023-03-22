@@ -4,5 +4,5 @@ include('views/partials/header.php');?>
 
 <img id="bg_img" src="static/images/bg.png" alt="">
 
-<?
+<?php
 include('views/partials/tail.php');

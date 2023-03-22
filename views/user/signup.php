@@ -55,5 +55,5 @@ include('views/partials/header.php');?>
     </div>
 </div>
 <script src="static/js/signup.js"></script>
-<?
+<?php
 include('views/partials/tail.php');
