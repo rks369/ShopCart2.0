@@ -26,13 +26,13 @@
                 <?php } else { ?>
 
                     <li class="nav-item">
-                        <a class="nav-link active" href="seller/login.php">Become Seller</a>
+                        <a class="nav-link active" href="seller/login">Become Seller</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="signup.php">Sign Up</a>
+                        <a class="nav-link active" href="signup">Sign Up</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="login.php">Login</a>
+                        <a class="nav-link active" href="login">Login</a>
                     </li>
                 <?php } ?>
             </ul>

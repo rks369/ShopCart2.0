@@ -1,4 +1,6 @@
-
+<?php
+include('views/partials/head.php');
+include('views/partials/seller_header.php'); ?>
 <div class="container">
     <div class="left">
         <img src="../static/images/seller_signup.png"">
@@ -62,3 +64,5 @@
     </div>
 </div>
 <script src="../seller_signup.js"></script>
+<?
+include('views/partials/tail.php');

@@ -1,3 +1,6 @@
+<?php
+include('views/partials/head.php');
+include('views/partials/header.php');?>
 <div class="container">
     <div class="left">
         <img src="static/images/user_signup.png">
@@ -51,4 +54,6 @@
         <br>
     </div>
 </div>
-<script src="signup.js"></script>
+<script src="static/js/signup.js"></script>
+<?
+include('views/partials/tail.php');

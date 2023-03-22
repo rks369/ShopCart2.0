@@ -1,3 +1,6 @@
+<?php
+include('views/partials/head.php');
+include('views/partials/seller_header.php'); ?>
 <div class="container">
     <div class="left">
         <img src="../static/images/forgot_password.jpg">
@@ -25,3 +28,6 @@
     </div>
 </div>
 <script src="forgot_password.js"></script>
+
+<?
+include('views/partials/tail.php');

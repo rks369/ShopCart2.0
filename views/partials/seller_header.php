@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="../static/css/style2.css">
 <nav id="navbar" class="navbar navbar-expand-lg " style="background-color: #06bfad;" data-bs-theme="dark">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">🛒Shop Cart Seller</a>
+    <a class="navbar-brand" href="../index.php">🛒Shop Cart Seller</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -14,7 +14,7 @@
 
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <?= $_SESSION['name'] ?>
+              <?= $_SESSION['name'] ?> 
             </a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="#">Orders</a></li>
@@ -25,13 +25,13 @@
         <?php } else { ?>
 
           <li class="nav-item">
-            <a class="nav-link active" href="../login.php">User Login</a>
+            <a class="nav-link active" href="../login">User Login</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="signup.php">Sign Up</a>
+            <a class="nav-link active" href="signup">Sign Up</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="login.php">Login</a>
+            <a class="nav-link active" href="login">Login</a>
           </li>
         <?php } ?>
       </ul>

@@ -1,4 +1,6 @@
-
+<?php
+include('views/partials/head.php');
+include('views/partials/header.php');?>
 <div class="container">
     <div class="left">
         <img src="static/images/user_login.jpg">
@@ -27,7 +29,7 @@
 
         </div>
 
-        <a class="text-end" href='./forgot_password.php'>Forgot Password?</a>
+        <a class="text-end" href='forgot_password'>Forgot Password?</a>
         <div class=" text-center">
             <span id='error_msg' class="error_span"></span>
         </div>
@@ -36,4 +38,6 @@
         <br>
     </div>
 </div>
-<script src="login.js"></script>
+<script src="static/js/login.js"></script>
+<?
+include('views/partials/tail.php');
