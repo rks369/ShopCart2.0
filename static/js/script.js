@@ -14,7 +14,7 @@ pop_up.addEventListener("click", () => {
 });
 
 function getProducts() {
-  fetch("/product/getMoreProducts", {
+  fetch("/product", {
     method: "POST",
     headers: {
       "Content-type": "application/json;charset=utf-8",
@@ -23,16 +23,20 @@ function getProducts() {
   })
     .then((response) => response.json())
     .then((result) => {
-      current_index += count;
-      if (result.length == 0) {
-        load_more.innerHTML = "No More Products";
-        load_more.classList.remove("primaryButton");
-        load_more.classList.add("secondaryButton");
-        no_more_product = true;
-      } else {
-        result.forEach((product) => {
-          createProductItem(product);
-        });
+      if (result["msg"] == "Done") {
+        current_index += count;
+        if (result['data'].length == 0) {
+          load_more.innerHTML = "No More Products";
+          load_more.classList.remove("primaryButton");
+          load_more.classList.add("secondaryButton");
+          no_more_product = true;
+        } else {
+          result['data'].forEach((product) => {
+            createProductItem(product);
+          });
+        }
+      } else if(result['msg']=='Error') {
+        load_more.innerHTML = result['data'];
       }
     });
 }
@@ -43,7 +47,7 @@ function createProductItem(product) {
 
   const productImg = document.createElement("img");
   productImg.classList.add("product_img");
-  productImg.src = "../" + product.image;
+  productImg.src = "uploads/" + product.imageurl;
 
   const div1 = document.createElement("div");
 
@@ -69,7 +73,6 @@ function createProductItem(product) {
   div2.appendChild(addToCart);
 
   addToCart.addEventListener("click", () => {
-  
     if (addToCart.innerHTML == "Add To Cart") {
       fetch("/addToCart", {
         method: "POST",
@@ -119,17 +122,19 @@ function createProductItem(product) {
 
     product_details.innerHTML = "";
 
-    fetch("/product/productDetails", {
+    fetch("/getProduct", {
       method: "POST",
       headers: {
         "Content-type": "application/json;charset=utf-8",
       },
-      body: JSON.stringify({ id: product.pid }),
+      body: JSON.stringify({ product_id: product.product_id }),
     })
       .then((response) => response.json())
-      .then((product) => {
+      .then((result) => {
+        console.log(result);
+        let product = result['data'];
         let img = document.createElement("img");
-        img.src = product.image;
+        img.src = 'uploads/'+product.imageurl;
         img.classList.add("product_img");
 
         let div = document.createElement("div");
@@ -141,15 +146,16 @@ function createProductItem(product) {
         title.classList.add("product_title");
         title.innerHTML = product.title;
         div1.appendChild(title);
-      
+
         const price = document.createElement("p");
         price.classList.add("product_price");
         price.innerHTML = `Rs. ${product.price}/-`;
         div1.appendChild(price);
-      
+
         const description = document.createElement("p");
         description.classList.add("product_desc");
         description.innerHTML = product.description;
+        div1.appendChild(description);
 
         const div2 = document.createElement("div");
 
@@ -157,9 +163,9 @@ function createProductItem(product) {
         addToCart.classList.add("secondaryButton");
         addToCart.innerHTML = "Add To Cart";
         div2.appendChild(addToCart);
-      
+
         addToCart.addEventListener("click", (event) => {
-            event.stopPropagation()
+          event.stopPropagation();
           if (addToCart.innerHTML == "Add To Cart") {
             fetch("/addToCart", {
               method: "POST",
@@ -198,13 +204,13 @@ function createProductItem(product) {
               });
           }
         });
-      
+
         const buyNow = document.createElement("button");
         buyNow.classList.add("primaryButton");
         buyNow.innerHTML = "Buy Now";
         div2.appendChild(buyNow);
 
-        buyNow.addEventListener('click',(event)=>{
+        buyNow.addEventListener("click", (event) => {
           event.stopPropagation();
           fetch("/addToCart", {
             method: "POST",
@@ -224,9 +230,8 @@ function createProductItem(product) {
               }
               console.log(result);
             });
+        });
 
-        })
-      
         div.append(div1);
         div.append(div2);
 

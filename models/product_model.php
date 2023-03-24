@@ -74,4 +74,14 @@ class ProductModel
         }
         return $productList;
     }
+    public function getProduct($product_id): array
+    {
+        $productList = [];
+
+        $result = $this->db->select('products', ['product_id' => $product_id]);
+        if ($result) {
+            $productList = $result;
+        }
+        return $productList;
+    }
 }

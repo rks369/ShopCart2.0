@@ -33,7 +33,7 @@ $router->get('/seller/logout', function () {
 });
 
 $router->post('/seller/products', function () {
-    SellerController::authCheck();
+    
     SellerController::getProductList();
 });
 $router->post('/seller/addProduct', function () {

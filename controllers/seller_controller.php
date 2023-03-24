@@ -18,6 +18,18 @@ class SellerController
             exit;
         }
     }
+    static function authCheckMsg()
+    {
+        if (!isset($_SESSION['id'])) {
+            return  'Not Login';
+        } else  if ($_SESSION['id'] == '-1') {
+            return 'Not a Valid User';
+        } else  if ($_SESSION['role'] != 'seller') {
+            return 'Acess Denied';
+        } else {
+            return 'allowed';
+        }
+    }
     static function getDashBoardPage()
     {
         self::authCheck();
@@ -29,12 +41,14 @@ class SellerController
         include('views/seller/login.php');
     }
     static function getSignUpPage()
-    {        self::authCheck();
+    {
+        self::authCheck();
 
         include('views/seller/signup.php');
     }
     static function getChangePasswordPage()
-    {        self::authCheck();
+    {
+        self::authCheck();
 
         include('views/seller/change_password.php');
     }
@@ -115,37 +129,46 @@ class SellerController
 
         $body = $_POST;
         $body['seller_id'] = $_SESSION['id'];
-        $file =$_FILES['image'];
-        $file['name'] = $_SESSION['id'].time().'.png';
-        $body['imageurl']= $file['name'];
-        move_uploaded_file($file['tmp_name'],'uploads/'.$file['name']);
-        
+        $file = $_FILES['image'];
+        $file['name'] = $_SESSION['id'] . time() . '.png';
+        $body['imageurl'] = $file['name'];
+        move_uploaded_file($file['tmp_name'], 'uploads/' . $file['name']);
+
         $product = new Product($body);
 
         $productModel = new ProductModel();
         $productModel->addProduct($product->toArray());
 
-        if($productModel)
-        {
-            $response->msg='Done';
-            $response->body=$body;
- 
-        }else
-        {
-            $response->msg='Error';
-            $response->body='Enable to Add Product At This Time';
+        if ($productModel) {
+            $response->msg = 'Done';
+            $response->body = $body;
+        } else {
+            $response->msg = 'Error';
+            $response->body = 'Enable to Add Product At This Time';
         }
         echo json_encode($response);
     }
 
-    static function getProductList(){
-        $productModel = new ProductModel();
+    static function getProductList()
+    {
         $response = new stdClass();
+        if (self::authCheckMsg() == 'allowed') {
+            $productModel = new ProductModel();
 
-       $productList =  $productModel->getSellerProducts();
-        $response->msg='Done';
-        $response->data=$productList;
-        
+            $productList =  $productModel->getSellerProducts();
+
+            if (count($productList) == 0) {
+                $response->msg = 'Error';
+                $response->data = "No Products Available";
+            } else {
+                $response->msg = 'Done';
+                $response->data = $productList;
+            }
+        } else {
+            $response->msg = 'Error';
+            $response->data = self::authCheckMsg();
+        }
+
         echo json_encode($response);
     }
 

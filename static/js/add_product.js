@@ -81,7 +81,6 @@ addProductBtn.addEventListener("click", () => {
       if (product_image.files[0] == null) {
         err_msg.innerHTML = "Please Select A File";
       } else {
-        
         fetch("/seller/addProduct", { method: "POST", body: formData })
           .then((response) => response.json())
           .then((result) => {
@@ -132,13 +131,10 @@ function getProductList() {
     body: JSON.stringify({ current_index, count }),
   })
     .then((response) => response.json())
-    .then((msg) => {
-      if (msg["err"]) {
-        productsList.classList.add("error_span");
-        productsList.innerHTML = "Something Went Wrong !!!";
-      } else {
+    .then((result) => {
+      if (result["msg"] == "Done") {
         current_index += count;
-        result = msg["data"];
+        result = result["data"];
         if (result.length == 0) {
           load_more.innerHTML = "No More Products";
           load_more.classList.remove("primaryButton");
@@ -150,6 +146,10 @@ function getProductList() {
             createProductUI(product);
           });
         }
+      } else {
+        productsList.classList.add("error_span");
+        productsList.innerHTML = "Something Went Wrong !!!";
+        load_more.innerHTML = result;
       }
     });
 }
@@ -261,26 +261,26 @@ function createProductUI(product) {
 function createOrderDetailsTile(orderDetails) {
   const orderrow = document.createElement("tr");
 
-  const rowValue1 = document.createElement("td")
+  const rowValue1 = document.createElement("td");
   rowValue1.innerHTML = orderDetails.name;
   orderrow.appendChild(rowValue1);
 
-  const rowValue2 = document.createElement("td")
+  const rowValue2 = document.createElement("td");
   rowValue2.innerHTML = orderDetails.quantity;
   orderrow.appendChild(rowValue2);
 
-  const rowValue3 = document.createElement("td")
-  rowValue3.innerHTML = JSON.parse(orderDetails.billing_address)['address'];
+  const rowValue3 = document.createElement("td");
+  rowValue3.innerHTML = JSON.parse(orderDetails.billing_address)["address"];
   orderrow.appendChild(rowValue3);
 
-  const rowValue4 = document.createElement("td")
+  const rowValue4 = document.createElement("td");
   rowValue4.innerHTML = new Date(orderDetails.order_time).toLocaleDateString();
   orderrow.appendChild(rowValue4);
 
-  let status = JSON.parse(orderDetails.activity)
-  const rowValue5 = document.createElement("td")
-  rowValue5.innerHTML = status[status.length-1]['title'];
+  let status = JSON.parse(orderDetails.activity);
+  const rowValue5 = document.createElement("td");
+  rowValue5.innerHTML = status[status.length - 1]["title"];
   orderrow.appendChild(rowValue5);
-  
+
   order_items_list.appendChild(orderrow);
 }

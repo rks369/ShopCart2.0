@@ -9,7 +9,6 @@ session_start();
 
 
 $router->get('/', function () {
-    UserController::authCheck();
     include('views/home.php');
 });
 

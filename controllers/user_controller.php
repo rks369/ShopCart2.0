@@ -86,7 +86,7 @@ class UserController
         $userDetails['email'] = $body->email;
         $userDetails['password'] = $body->password;
 
-        
+
         $user = $userModel->getUser($body->email);
         if ($user && $user->password == $userDetails['password']) {
             $_SESSION['id'] = $user->status == '1' ? $user->id : '-1';
@@ -99,6 +99,45 @@ class UserController
 
             $response->msg = 'Error';
             $response->data = "Credential Doesn't Match!!!";
+        }
+
+
+        echo json_encode($response);
+    }
+    static function getProductList()
+    {
+        $response = new stdClass();
+
+        $productModel = new ProductModel();
+
+        $productList =  $productModel->getProducts();
+
+        if (count($productList) == 0) {
+            $response->msg = 'Error';
+            $response->data = "No Products Available";
+        } else {
+            $response->msg = 'Done';
+            $response->data = $productList;
+        }
+
+
+        echo json_encode($response);
+    }
+    static function getProduct()
+    {
+        $response = new stdClass();
+        $body =  file_get_contents('php://input');
+        $body = json_decode($body);
+        $productModel = new ProductModel();
+
+        $productList =  $productModel->getProduct($body->product_id);
+
+        if (count($productList) == 0) {
+            $response->msg = 'Error';
+            $response->data = "No Products Available";
+        } else {
+            $response->msg = 'Done';
+            $response->data = $productList[0];
         }
 
 
