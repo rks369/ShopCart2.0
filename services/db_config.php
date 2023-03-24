@@ -16,9 +16,7 @@ class DataBase
     public function select($table, $conditions = array())
     {
         $res =  pg_select($this->connection, $table, $conditions);
-
         if ($res) {
-
             return $res;
         } else {
             return null;

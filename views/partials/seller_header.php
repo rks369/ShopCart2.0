@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="../static/css/style2.css">
 <nav id="navbar" class="navbar navbar-expand-lg " style="background-color: #06bfad;" data-bs-theme="dark">
   <div class="container-fluid">
-    <a class="navbar-brand" href="../index.php">🛒Shop Cart Seller</a>
+    <a class="navbar-brand" href="../">🛒Shop Cart Seller</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -18,8 +18,8 @@
             </a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="#">Orders</a></li>
-              <li><a class="dropdown-item" href="#">Chnage Password</a></li>
-              <li><a class="dropdown-item" href="#">Logout</a></li>
+              <li><a class="dropdown-item" href="change_password">Chnage Password</a></li>
+              <li><a class="dropdown-item" href="logout">Logout</a></li>
             </ul>
           </li>
         <?php } else { ?>

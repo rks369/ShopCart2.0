@@ -19,6 +19,15 @@ include('views/partials/seller_header.php'); ?>
             </div>
         </div>
         <div class="mb-3 row">
+            <label for="name" class="col-sm-2 col-form-label">Bussines Name</label>
+            <div class="col-sm-10">
+                <input type="bname" class="form-control" id="bname">
+                <div>
+                    <span id='bname_err' class="error_span"></span>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3 row">
             <label for="email" class="col-sm-2 col-form-label">Email</label>
             <div class="col-sm-10">
                 <input type="email" class="form-control" id="email">
@@ -28,11 +37,20 @@ include('views/partials/seller_header.php'); ?>
             </div>
         </div>
         <div class="mb-3 row">
-            <label for="mobile" class="col-sm-2 col-form-label">Mobile</label>
+            <label for="mobile" class="col-sm-2 col-form-label">Mobile </label>
             <div class="col-sm-10">
                 <input type="mobile" class="form-control" id="mobile">
                 <div>
                     <span id='mobile_err' class="error_span"></span>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="gst" class="col-sm-2 col-form-label">GST</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" id="gst">
+                <div>
+                    <span id='gst_err' class="error_span"></span>
                 </div>
             </div>
         </div>
@@ -63,6 +81,6 @@ include('views/partials/seller_header.php'); ?>
         <br>
     </div>
 </div>
-<script src="../seller_signup.js"></script>
-<?
+<script src="../static/js/seller_signup.js"></script>
+<?php
 include('views/partials/tail.php');

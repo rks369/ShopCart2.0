@@ -5,6 +5,16 @@ require_once('models/user_model.php');
 
 class UserController
 {
+    static function authCheck()
+    {
+        if (!isset($_SESSION['id'])) {
+            require_once('views/user/login.php');
+            exit;
+        } else  if ($_SESSION['id'] === '-1') {
+            require_once('views/user/verify_email.php');
+            exit;
+        }
+    }
     static function getLoginPage()
     {
         require_once('views/user/login.php');
@@ -15,7 +25,7 @@ class UserController
     }
     static function getChangePasswordPage()
     {
-        authCheck();
+        self::authCheck();
         require_once('views/user/change_password.php');
     }
     static function getForgotPasswordPage()
@@ -48,7 +58,7 @@ class UserController
 
             $result = $userModel->addUser($userDetails);
             if ($result) {
-                $_SESSION['id'] = $user['status'] == '1' ? $user['id'] : '-1';
+                $_SESSION['id'] =  '-1';
                 $_SESSION['name'] = $userDetails['name'];
                 $response->msg = 'Done';
                 $response->data = 'User Added Sucessfully!!!';
@@ -76,11 +86,13 @@ class UserController
         $userDetails['email'] = $body->email;
         $userDetails['password'] = $body->password;
 
+        
         $user = $userModel->getUser($body->email);
-
-        if ($user && $user->password === $userDetails['password']) {
-            $_SESSION['id'] = $user->id;
+        if ($user && $user->password == $userDetails['password']) {
+            $_SESSION['id'] = $user->status == '1' ? $user->id : '-1';
             $_SESSION['name'] = $user->name;
+            $_SESSION['role'] = 'user';
+
             $response->msg = 'Done';
             $response->data = $user->toArray();
         } else {

@@ -1,16 +1,32 @@
 <?php
+require_once('controllers/seller_controller.php');
+
+$router->get('/seller', function () {
+    SellerController::getSignUpPage();
+});
+
 $router->get('/seller/login', function () {
-    include('views/seller/login.php');
+    SellerController::getLoginPage();
 });
 
 $router->get('/seller/signup', function () {
-    include('views/seller/signup.php');
+    SellerController::getSignUpPage();
 });
 
 $router->get('/seller/change_password', function () {
-    include('views/seller/change_password.php');
+    SellerController::getChangePasswordPage();
 });
 
 $router->get('/seller/forgot_password', function () {
-    include('views/seller/forgot_password.php');
+    SellerController::getForgotPasswordPage();
+});
+
+$router->post('/seller/signup', function () {
+    SellerController::signUp();
+});
+$router->post('/seller/login', function () {
+    SellerController::login();
+});
+$router->get('/seller/logout', function () {
+    SellerController::logout();
 });

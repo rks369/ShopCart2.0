@@ -10,7 +10,8 @@ $router->get('/signup', function () {
 });
 
 $router->get('/change_password', function () {
-  UserController::getChangePasswordPage();
+    UserController::authCheck();
+    UserController::getChangePasswordPage();
 });
 
 $router->get('/forgot_password', function () {

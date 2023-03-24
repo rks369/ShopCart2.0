@@ -29,5 +29,5 @@ include('views/partials/seller_header.php'); ?>
 </div>
 <script src="forgot_password.js"></script>
 
-<?
+<?php
 include('views/partials/tail.php');

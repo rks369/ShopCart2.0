@@ -1,14 +1,17 @@
 const nameInput = document.getElementById("name");
+const bNameInput = document.getElementById("bname");
 const emailInput = document.getElementById("email");
 const mobileInput = document.getElementById("mobile");
-const addressInput = document.getElementById('address')
+const gstInput = document.getElementById("gst");
+const addressInput = document.getElementById("address");
 const passwordInput = document.getElementById("password");
 
-
 const name_err = document.getElementById("name_err");
+const bname_err = document.getElementById("bname_err");
 const email_err = document.getElementById("email_err");
 const mobile_err = document.getElementById("mobile_err");
-const address_err = document.getElementById("address_err")
+const gst_err = document.getElementById("gst_err");
+const address_err = document.getElementById("address_err");
 const password_err = document.getElementById("password_err");
 
 const errorSpan = document.getElementById("error_msg");
@@ -59,35 +62,36 @@ function validatePassword(password) {
 
 signUpBtn.addEventListener("click", function (event) {
   name_err.innerHTML = "";
+  bname_err.innerHTML = "";
   email_err.innerHTML = "";
   mobile_err.innerHTML = "";
-  address_err.innerHTML= "";
-  password_err.innerHTML="";
+  gst_err.innerHTML = "";
+  address_err.innerHTML = "";
+  password_err.innerHTML = "";
 
   let emailRgx = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
   if (nameInput.value.trim().length < 5) {
     name_err.innerHTML = "Please Enter A Valid Name!!!";
+  } else if(bNameInput.value.trim().length <3){
+    bname_err.innerHTML ="Please Enter A Valid Bussiness Name";
   } else if (!email.value.trim().match(emailRgx)) {
     email_err.innerHTML = "Please Enter A Valid E-mail!!!";
-  } else if(mobileInput.value.trim().length!=10)
-  {
-    mobile_err.innerHTML='MObile Should Be Of 10 Digits'
-  }else if(addressInput.value.trim().length<=5)
-  {
-    address_err.innerHTML='Please Enter A Valid Address'
-  }
-  else if (!validatePassword(passwordInput.value.trim())) {
+  } else if (mobileInput.value.trim().length != 10) {
+    mobile_err.innerHTML = "MObile Should Be Of 10 Digits";
+  } else if (addressInput.value.trim().length <= 5) {
+    address_err.innerHTML = "Please Enter A Valid Address";
+  } else if (!validatePassword(passwordInput.value.trim())) {
     password_err.innerHTML = "Please Enter A Valid Passward";
-
   } else {
-
     let user = {
-      name: nameInput.value,
+      seller_name: nameInput.value,
+      bussiness_name:bNameInput.value,
       email: emailInput.value,
       password: passwordInput.value,
       mobile: mobileInput.value,
-      address:{"hno":addressInput.value}
+      gst:gst.value,
+      address: addressInput.value,
     };
     fetch("/seller/signup", {
       method: "POST",
@@ -98,15 +102,12 @@ signUpBtn.addEventListener("click", function (event) {
     })
       .then((response) => response.json())
       .then(function (result) {
-        console.log(result)
-        if(result['err'])
-        {
-          errorSpan.innerHTML = result['err'];
-
-        }else
-        if (result["data"] == "done") {
+        console.log(result);
+        if (result["msg"]=='Error') {
+          errorSpan.innerHTML = result["data"];
+        } else if (result["msg"] == "Done") {
           window.location.href = "./addProduct";
-        } 
+        }
       });
   }
 });

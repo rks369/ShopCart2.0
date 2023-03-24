@@ -17,7 +17,7 @@ class User
         $this->id = $data['id'] ?? '-1';
         $this->name = $data['name'] ?? '';
         $this->email = $data['email'] ?? '';
-        $this->mobile = $data['modile'] ?? '';
+        $this->mobile = $data['mobile'] ?? '';
         $this->password = $data['password'] ?? '';
         $this->status = $data['status'] ?? '';
     }
@@ -54,7 +54,7 @@ class UserModel
     {
         $condition = array();
 
-        $condition['email'] = "$email";
+        $condition['email'] = $email;
         $ret = $this->db->select('users', $condition);
 
         if ($ret) {

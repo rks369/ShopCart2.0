@@ -26,7 +26,7 @@
                 <?php } else { ?>
 
                     <li class="nav-item">
-                        <a class="nav-link active" href="seller/login">Become Seller</a>
+                        <a class="nav-link active" href="seller/signup">Become Seller</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="signup">Sign Up</a>

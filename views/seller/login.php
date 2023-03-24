@@ -38,6 +38,6 @@ include('views/partials/seller_header.php'); ?>
         <br>
     </div>
 </div>
-<script src="../seller_login.js"></script>
-<?
+<script src="../static/js/seller_login.js"></script>
+<?php
 include('views/partials/tail.php');
