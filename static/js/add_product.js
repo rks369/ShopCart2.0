@@ -77,22 +77,23 @@ addProductBtn.addEventListener("click", () => {
     formData.append("price", price);
     formData.append("stock", stock);
     formData.append("image", image);
-    if (addProductBtn.innerHTML == "Add product") {
+    if (addProductBtn.innerHTML == "Add Product") {
       if (product_image.files[0] == null) {
         err_msg.innerHTML = "Please Select A File";
       } else {
+        
         fetch("/seller/addProduct", { method: "POST", body: formData })
           .then((response) => response.json())
           .then((result) => {
             console.log(result);
-            if (result["data"] == "done") {
+            if (result["msg"] == "Done") {
               product_name.value = "";
               product_description.value = "";
               product_price.value = "";
               product_stock.value = "";
               product_image.value = "";
             } else {
-              err_msg.innerHTML = result["err"];
+              err_msg.innerHTML = result["data"];
             }
           });
       }
@@ -123,7 +124,7 @@ function getProductList() {
   let div = document.createElement("div");
 
   div.innerHTML = "";
-  fetch("/seller/getProductList", {
+  fetch("products", {
     method: "POST",
     headers: {
       "Content-type": "application/json;charset=utf-8",
@@ -145,6 +146,7 @@ function getProductList() {
           no_more_product = true;
         } else {
           result.forEach((product) => {
+            console.log(product);
             createProductUI(product);
           });
         }
@@ -158,7 +160,7 @@ function createProductUI(product) {
 
   const productImg = document.createElement("img");
   productImg.classList.add("product_img");
-  productImg.src = "../" + product.image;
+  productImg.src = "../uploads/" + product.imageurl;
 
   const div1 = document.createElement("div");
 

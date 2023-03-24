@@ -1,5 +1,6 @@
 <?php
 require_once('models/seller_model.php');
+require_once('models/product_model.php');
 
 class SellerController
 
@@ -16,6 +17,11 @@ class SellerController
             echo 'Acess Denied';
             exit;
         }
+    }
+    static function getDashBoardPage()
+    {
+        self::authCheck();
+        include('views/seller/dashboard.php');
     }
     static function getLoginPage()
     {
@@ -100,6 +106,46 @@ class SellerController
         }
 
 
+        echo json_encode($response);
+    }
+
+    static function addProduct()
+    {
+        $response = new stdClass();
+
+        $body = $_POST;
+        $body['seller_id'] = $_SESSION['id'];
+        $file =$_FILES['image'];
+        $file['name'] = $_SESSION['id'].time().'.png';
+        $body['imageurl']= $file['name'];
+        move_uploaded_file($file['tmp_name'],'uploads/'.$file['name']);
+        
+        $product = new Product($body);
+
+        $productModel = new ProductModel();
+        $productModel->addProduct($product->toArray());
+
+        if($productModel)
+        {
+            $response->msg='Done';
+            $response->body=$body;
+ 
+        }else
+        {
+            $response->msg='Error';
+            $response->body='Enable to Add Product At This Time';
+        }
+        echo json_encode($response);
+    }
+
+    static function getProductList(){
+        $productModel = new ProductModel();
+        $response = new stdClass();
+
+       $productList =  $productModel->getSellerProducts();
+        $response->msg='Done';
+        $response->data=$productList;
+        
         echo json_encode($response);
     }
 

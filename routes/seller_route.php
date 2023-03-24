@@ -2,7 +2,8 @@
 require_once('controllers/seller_controller.php');
 
 $router->get('/seller', function () {
-    SellerController::getSignUpPage();
+
+    SellerController::getDashBoardPage();
 });
 
 $router->get('/seller/login', function () {
@@ -29,4 +30,12 @@ $router->post('/seller/login', function () {
 });
 $router->get('/seller/logout', function () {
     SellerController::logout();
+});
+
+$router->post('/seller/products', function () {
+    SellerController::authCheck();
+    SellerController::getProductList();
+});
+$router->post('/seller/addProduct', function () {
+    SellerController::addProduct();
 });
