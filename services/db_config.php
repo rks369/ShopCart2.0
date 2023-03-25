@@ -37,7 +37,16 @@ class DataBase
 
     public function insert($table, $data)
     {
-        $res =  pg_insert($this->connection, $table, $data, PGSQL_DML_EXEC);
+        $res =  pg_insert($this->connection, $table, $data);
+        if ($res) {
+            return 'Sucess';
+        } else {
+            return 'Error';
+        }
+    }
+    public function update($table, $data,$condition)
+    {
+        $res =  pg_update($this->connection, $table, $data,$condition);
         if ($res) {
             return 'Sucess';
         } else {

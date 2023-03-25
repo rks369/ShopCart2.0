@@ -33,9 +33,13 @@ $router->get('/seller/logout', function () {
 });
 
 $router->post('/seller/products', function () {
-    
     SellerController::getProductList();
 });
+
 $router->post('/seller/addProduct', function () {
     SellerController::addProduct();
+});
+
+$router->post('/seller/updateProductStatus', function () {
+    SellerController::updateProductStatus();
 });

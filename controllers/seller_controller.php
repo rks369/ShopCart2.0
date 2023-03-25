@@ -179,6 +179,36 @@ class SellerController
         echo json_encode($response);
     }
 
+    static function updateProductStatus()
+    {
+        $response = new stdClass();
+
+        $body =  file_get_contents('php://input');
+        $body = json_decode($body, true);
+
+        $product_id = $body['product_id'];
+        $status = $body['status'];
+
+        if (self::authCheckMsg() == 'allowed') {
+            $productModel = new ProductModel();
+
+            $result =  $productModel->updateStatus($product_id,$status);
+
+            if ($result == 'Sucess') {
+                $response->msg = 'Done';
+                $response->data = "Product Status Changed!!!";
+            } else {
+                $response->msg = 'Error';
+                $response->data = 'Something Went Wrong !!!';
+            }
+        } else {
+            $response->msg = 'Error';
+            $response->data = self::authCheckMsg();
+        }
+
+        echo json_encode($response);
+    }
+
     static function logout()
     {
         session_destroy();

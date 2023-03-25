@@ -68,13 +68,14 @@ class ProductModel
     public function getSellerProducts($current_index, $count): array
     {
         $productList = [];
-        $sql_query = "SELECT * FROM products WHERE seller_id = $_SESSION[id] LIMIT $count OFFSET$current_index;";
+        $sql_query = "SELECT * FROM products WHERE seller_id = $_SESSION[id] LIMIT $count OFFSET $current_index;";
         $result = $this->db->execute($sql_query);
         if ($result) {
             $productList = $result;
         }
         return $productList;
     }
+
     public function getProduct($product_id): array
     {
         $productList = [];
@@ -84,5 +85,10 @@ class ProductModel
             $productList = $result;
         }
         return $productList;
+    }
+
+    public function updateStatus($product_id, $status)
+    {
+        return $this->db->update('products', ['status' => $status], ['product_id' => $product_id]);
     }
 }

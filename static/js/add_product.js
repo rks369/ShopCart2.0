@@ -210,18 +210,24 @@ function createProductUI(product) {
   status.addEventListener("click", () => {
     status.disabled = true;
     const statusValue = status.innerHTML == "Enable" ? 0 : 1;
-    fetch("/seller/changeStatus", {
+    fetch("updateProductStatus", {
       method: "POST",
       headers: {
         "Content-type": "application/json;charset=utf-8",
       },
-      body: JSON.stringify({ pid: product.pid, status: statusValue }),
+      body: JSON.stringify({ product_id: product.product_id, status: statusValue }),
     })
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        status.disabled = false;
-        status.innerHTML = status.innerHTML == "Enable" ? "Disable" : "Enable";
+        if(result['msg']=="Done")
+        {
+          status.disabled = false;
+          status.innerHTML = status.innerHTML == "Enable" ? "Disable" : "Enable";
+        }else if(result['msg']=="Error")
+        {
+          alert('Something Went Wrong !!!');
+        }
       });
   });
 
