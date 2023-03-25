@@ -19,6 +19,14 @@ $router->get('/forgot_password', function () {
     UserController::getForgotPasswordPage();
 });
 
+$router->get('/cart', function () {
+    UserController::getCartPage();
+});
+
+$router->get('/order_history', function () {
+    UserController::getOrderHistoryPage();
+});
+
 $router->post('/signup', function () {
     UserController::signUp();
 });

@@ -30,10 +30,8 @@ function getProducts() {
   })
     .then((response) => response.json())
     .then((result) => {
-      console.log(result);
       if (result["msg"] == "Done") {
         current_index += count;
-
         result["data"].forEach((product) => {
           createProductItem(product);
         });
@@ -136,7 +134,6 @@ function createProductItem(product) {
     })
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         let product = result["data"];
         let img = document.createElement("img");
         img.src = "uploads/" + product.imageurl;

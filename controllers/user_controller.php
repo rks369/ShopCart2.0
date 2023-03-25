@@ -10,28 +10,45 @@ class UserController
         if (!isset($_SESSION['id'])) {
             require_once('views/user/login.php');
             exit;
-        } else  if ($_SESSION['id'] === '-1') {
+        } else  if ($_SESSION['id'] == '-1') {
             require_once('views/user/verify_email.php');
             exit;
         }
     }
+
     static function getLoginPage()
     {
         require_once('views/user/login.php');
     }
+
     static function getSignUpPage()
     {
         require_once('views/user/signup.php');
     }
+
     static function getChangePasswordPage()
     {
         self::authCheck();
         require_once('views/user/change_password.php');
     }
+
+    static function getCartPage()
+    {
+        self::authCheck();
+        require_once('views/user/cart.php');
+    }
+
+    static function getOrderHistoryPage()
+    {
+        self::authCheck();
+        require_once('views/user/order_history.php');
+    }
+
     static function getForgotPasswordPage()
     {
         require_once('views/user/login.php');
     }
+
     static function signUp()
     {
 
@@ -89,10 +106,11 @@ class UserController
 
         $user = $userModel->getUser($body->email);
         if ($user && $user->password == $userDetails['password']) {
-            $_SESSION['id'] = $user->status == '1' ? $user->id : '-1';
+            
+            $_SESSION['id'] = $user->status == '1' ? $user->id: '-1';
             $_SESSION['name'] = $user->name;
             $_SESSION['role'] = 'user';
-
+            
             $response->msg = 'Done';
             $response->data = $user->toArray();
         } else {

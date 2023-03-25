@@ -9,16 +9,10 @@ include('views/partials/header.php'); ?>
 <img id="bg_img" src="static/images/bg.png" alt="">
 <div class="contain" id="products">
 </div>
-<?php
-if (isset($_SESSION['id'])) {
-?>
-    <div class="contain">
-        <button class="primaryButton" id="load_more">Load More</button>
-        <br><br>
-    </div>
-<?php
-}
-?>
+<div class="contain">
+    <button class="primaryButton" id="load_more">Load More</button>
+    <br><br>
+</div>
 
 
 <footer class="footer">

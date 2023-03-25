@@ -10,7 +10,7 @@
 
                 <?php if (isset($_SESSION['name'])) { ?>
                     <li class="nav-item">
-                        <a class="nav-link active " href="#">Cart</a>
+                        <a class="nav-link active " href="cart">Cart</a>
                     </li>
 
                     <li class="nav-item dropdown">
@@ -18,7 +18,7 @@
                             <?= $_SESSION['name'] ?>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Order History</a></li>
+                            <li><a class="dropdown-item" href="order_history">Order History</a></li>
                             <li><a class="dropdown-item" href="change_password">Chnage Password</a></li>
                             <li><a class="dropdown-item" href="logout">Logout</a></li>
                         </ul>

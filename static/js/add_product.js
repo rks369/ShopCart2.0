@@ -142,7 +142,6 @@ function getProductList() {
           no_more_product = true;
         } else {
           result.forEach((product) => {
-            console.log(product);
             createProductUI(product);
           });
         }

@@ -14,7 +14,7 @@ class User
 
     public function __construct(array $data)
     {
-        $this->id = $data['id'] ?? '-1';
+        $this->id = $data['user_id'] ?? '-1';
         $this->name = $data['name'] ?? '';
         $this->email = $data['email'] ?? '';
         $this->mobile = $data['mobile'] ?? '';
