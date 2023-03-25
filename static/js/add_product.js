@@ -146,10 +146,10 @@ function getProductList() {
             createProductUI(product);
           });
         }
-      } else {
-        productsList.classList.add("error_span");
-        productsList.innerHTML = "Something Went Wrong !!!";
-        load_more.innerHTML = result;
+      } else if(result['msg']=='Error') {
+        load_more.innerHTML = result['data'];
+        load_more.classList.remove('primarybutton');
+        load_more.classList.add('secondarybutton');
       }
     });
 }

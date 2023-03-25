@@ -13,6 +13,18 @@ class DataBase
         $this->connection = pg_connect("$host $port $dbname $credentials");
     }
 
+    public function execute($query)
+    {
+        $res =  pg_query($this->connection, $query);
+        if ($res) {
+            $result =[];
+            while($result []= pg_fetch_array($res,NULL,PGSQL_ASSOC));
+            array_pop($result);
+            return $result;
+        } else {
+            return null;
+        }
+    }
     public function select($table, $conditions = array())
     {
         $res =  pg_select($this->connection, $table, $conditions);

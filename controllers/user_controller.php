@@ -108,9 +108,15 @@ class UserController
     {
         $response = new stdClass();
 
+        $body =  file_get_contents('php://input');
+        $body = json_decode($body, true);
+
+        $curremt_index = $body['current_index'];
+        $count = $body['count'];
+
         $productModel = new ProductModel();
 
-        $productList =  $productModel->getProducts();
+        $productList =  $productModel->getProducts($curremt_index,$count);
 
         if (count($productList) == 0) {
             $response->msg = 'Error';

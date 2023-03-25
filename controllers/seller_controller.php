@@ -152,10 +152,17 @@ class SellerController
     static function getProductList()
     {
         $response = new stdClass();
+
+        $body =  file_get_contents('php://input');
+        $body = json_decode($body, true);
+
+        $curremt_index = $body['current_index'];
+        $count = $body['count'];
+
         if (self::authCheckMsg() == 'allowed') {
             $productModel = new ProductModel();
 
-            $productList =  $productModel->getSellerProducts();
+            $productList =  $productModel->getSellerProducts($curremt_index,$count);
 
             if (count($productList) == 0) {
                 $response->msg = 'Error';

@@ -54,21 +54,22 @@ class ProductModel
         return $this->db->insert('products', $details);
     }
 
-    public function getProducts(): array
+    public function getProducts($current_index, $count): array
     {
         $productList = [];
 
-        $result = $this->db->select('products', ['status' => '0']);
+        $sql_query = "SELECT * FROM products WHERE status=0 LIMIT $count OFFSET $current_index;";
+        $result = $this->db->execute($sql_query);
         if ($result) {
             $productList = $result;
         }
         return $productList;
     }
-    public function getSellerProducts(): array
+    public function getSellerProducts($current_index, $count): array
     {
         $productList = [];
-
-        $result = $this->db->select('products', ['seller_id' => $_SESSION['id']]);
+        $sql_query = "SELECT * FROM products WHERE seller_id = $_SESSION[id] LIMIT $count OFFSET$current_index;";
+        $result = $this->db->execute($sql_query);
         if ($result) {
             $productList = $result;
         }

@@ -1,4 +1,5 @@
 let items = document.getElementById("products");
+let loadModeButton = document.getElementById("load_more");
 
 let pop_up = document.getElementById("popup");
 let product_details = document.getElementById("product_details");
@@ -8,6 +9,12 @@ let count = 8;
 
 let no_more_product = false;
 getProducts();
+
+load_more.addEventListener("click", (event) => {
+  if (!no_more_product) {
+    getProducts();
+  }
+});
 
 pop_up.addEventListener("click", () => {
   pop_up.style.display = "none";
@@ -19,24 +26,22 @@ function getProducts() {
     headers: {
       "Content-type": "application/json;charset=utf-8",
     },
-    body: JSON.stringify({ start: current_index, count: count }),
+    body: JSON.stringify({ current_index, count }),
   })
     .then((response) => response.json())
     .then((result) => {
+      console.log(result);
       if (result["msg"] == "Done") {
         current_index += count;
-        if (result['data'].length == 0) {
-          load_more.innerHTML = "No More Products";
-          load_more.classList.remove("primaryButton");
-          load_more.classList.add("secondaryButton");
-          no_more_product = true;
-        } else {
-          result['data'].forEach((product) => {
-            createProductItem(product);
-          });
-        }
-      } else if(result['msg']=='Error') {
-        load_more.innerHTML = result['data'];
+
+        result["data"].forEach((product) => {
+          createProductItem(product);
+        });
+      } else if (result["msg"] == "Error") {
+        load_more.classList.remove("primarybutton");
+        load_more.classList.add("secondarybutton");
+        no_more_product = true;
+        load_more.innerHTML = result["data"];
       }
     });
 }
@@ -132,9 +137,9 @@ function createProductItem(product) {
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        let product = result['data'];
+        let product = result["data"];
         let img = document.createElement("img");
-        img.src = 'uploads/'+product.imageurl;
+        img.src = "uploads/" + product.imageurl;
         img.classList.add("product_img");
 
         let div = document.createElement("div");
