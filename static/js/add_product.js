@@ -97,13 +97,13 @@ addProductBtn.addEventListener("click", () => {
           });
       }
     } else {
-      formData.append("pid", product_name.key);
-      formData.append("image_url", product_image.key);
+      formData.append("product_id", product_name.key);
+      formData.append("imageurl", product_image.key);
       fetch("/seller/editProduct", { method: "POST", body: formData })
         .then((response) => response.json())
         .then((result) => {
           console.log(result);
-          if (result["data"] == "Done") {
+          if (result["msg"] == "Done") {
             window.location.reload();
             product_name.value = "";
             product_description.value = "";
@@ -111,8 +111,8 @@ addProductBtn.addEventListener("click", () => {
             product_stock.value = "";
             product_image.value = "";
             add_product_popup.style["display"] = "none";
-          } else {
-            err_msg.innerHTML = result["err"];
+          } else if(result['msg']=="Error") {
+            err_msg.innerHTML = result["data"];
           }
         });
     }
@@ -194,12 +194,12 @@ function createProductUI(product) {
     addProductBtn.innerHTML = "Update Details";
     add_product_popup.style["display"] = "block";
 
-    product_name.key = product.pid;
+    product_name.key = product.product_id;
     product_name.value = product.title;
     product_description.value = product.description;
     product_price.value = product.price;
     product_stock.value = product.stock;
-    product_image.key = product.image;
+    product_image.key = product.imageurl;
   });
 
   const status = document.createElement("button");

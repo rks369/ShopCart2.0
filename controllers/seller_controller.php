@@ -149,6 +149,35 @@ class SellerController
         echo json_encode($response);
     }
 
+    static function editProduct()
+    {
+        $response = new stdClass();
+
+        $body = $_POST;
+        $product_id = $_POST['product_id'];
+        if(isset($_FILES['image']))
+        {
+            $file = $_FILES['image'];
+            $file['name'] = $_SESSION['id'] . time() . '.png';
+            $body['imageurl'] = $file['name'];
+            move_uploaded_file($file['tmp_name'], 'uploads/' . $file['name']);
+        }
+
+        $product = new Product($body);
+
+        $productModel = new ProductModel();
+        $productModel->editProduct($product_id,$product->getupdateArray());
+
+        if ($productModel) {
+            $response->msg = 'Done';
+            $response->body = $body;
+        } else {
+            $response->msg = 'Error';
+            $response->body = 'Enable to Add Product At This Time';
+        }
+        echo json_encode($response);
+    }
+
     static function getProductList()
     {
         $response = new stdClass();

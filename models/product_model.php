@@ -28,16 +28,27 @@ class Product
 
     public function toArray()
     {
-        $sellerDetails = [];
+        $productDetals = [];
 
-        $sellerDetails['title'] = $this->title;
-        $sellerDetails['description'] = $this->description;
-        $sellerDetails['price'] = $this->price;
-        $sellerDetails['stock'] = $this->stock;
-        $sellerDetails['status'] = $this->status;
-        $sellerDetails['imageurl'] = $this->imageurl;
-        $sellerDetails['seller_id'] = $this->seller_id;
-        return $sellerDetails;
+        $productDetals['title'] = $this->title;
+        $productDetals['description'] = $this->description;
+        $productDetals['price'] = $this->price;
+        $productDetals['stock'] = $this->stock;
+        $productDetals['status'] = $this->status;
+        $productDetals['imageurl'] = $this->imageurl;
+        $productDetals['seller_id'] = $this->seller_id;
+        return $productDetals;
+    }
+
+    public function getupdateArray(){
+        $productDetals = [];
+
+        $productDetals['title'] = $this->title;
+        $productDetals['description'] = $this->description;
+        $productDetals['price'] = $this->price;
+        $productDetals['stock'] = $this->stock;
+        $productDetals['imageurl'] = $this->imageurl;
+        return $productDetals;
     }
 }
 
@@ -65,6 +76,12 @@ class ProductModel
         }
         return $productList;
     }
+    
+    public function editProduct($product_id, $updatedDetails)
+    {
+        return $this->db->update('products',$updatedDetails, ['product_id' => $product_id]);
+    }
+
     public function getSellerProducts($current_index, $count): array
     {
         $productList = [];

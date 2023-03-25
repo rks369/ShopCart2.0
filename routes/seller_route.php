@@ -40,6 +40,10 @@ $router->post('/seller/addProduct', function () {
     SellerController::addProduct();
 });
 
+$router->post('/seller/editProduct', function () {
+    SellerController::editProduct();
+});
+
 $router->post('/seller/updateProductStatus', function () {
     SellerController::updateProductStatus();
 });
