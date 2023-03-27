@@ -139,4 +139,14 @@ class UserModel
     {
         return $this->db->execute("SELECT * FROM cart JOIN products ON cart.product_id = products.product_id WHERE cart.user_id = $user_id;");
     }
+
+    public function addAddress(string $user_id, string $address): string
+    {
+        return $this->db->insert('address', ['user_id' => $user_id, 'address' => $address]);
+    }
+
+    public function getAddress(string $user_id)
+    {
+        return $this->db->select('address', ['user_id' => $user_id]);
+    }
 }

@@ -2,15 +2,52 @@ const cart_items = document.getElementById("cart_items");
 const total_amount_tag = document.getElementById("total_amount");
 const billing_address = document.getElementById("billing_address");
 const Order_now = document.getElementById("Order_now");
+const add_address = document.getElementById("add_address");
+const selectAddress = document.getElementById("selectAddress");
+let error_msg = document.getElementById('error_msg');
 
 let total_amount = 0;
 let cart_id_list = [];
+
 getCartList();
+getAddressList();
+
+billing_address.style["display"] = "none";
+
+add_address.addEventListener("click", (event) => {
+  if (add_address.innerHTML == "Add New Address") {
+    add_address.innerHTML = "Add Address";
+    billing_address.style["display"] = "block";
+  } else {
+    if (billing_address.value.trim() == "") {
+      alert("Please Ente A Billing Address");
+    } else {
+      fetch("addAddress", {
+        method: "POST",
+        body: JSON.stringify({ address: billing_address.value.trim() }),
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          console.log(result);
+          if (result["msg"] == "Done") {
+            add_address.innerHTML = "Add New Address";
+            billing_address.style["display"] = "none";
+            createAddressTile(result["data"]);
+            error_msg.innerHTML="";
+            billing_address.value="";
+          } else if (result["msg"] == "Error") {
+            alert("Something Went Wrong !!!");
+          }
+        });
+    }
+  }
+});
+
 function getCartList() {
   fetch("cartItems", { method: "GET" })
     .then((response) => response.json())
     .then((result) => {
-      if (result["msg"]=="Error") {
+      if (result["msg"] == "Error") {
         cart_items.innerHTML = result["data"];
       } else {
         result["data"].forEach((cartItem) => {
@@ -19,6 +56,41 @@ function getCartList() {
         });
       }
     });
+}
+
+function getAddressList() {
+  fetch("getAddress", { method: "GET" })
+    .then((res) => res.json())
+    .then((result) => {
+      console.log(result);
+      if (result["msg"] == "Done") {
+        result["data"].forEach((address) => {
+          createAddressTile(address);
+        });
+      } else if (result["msg"] == "Error") {
+      
+        error_msg.innerHTML = "No Address Saved";
+
+      }
+    });
+}
+
+function createAddressTile(address) {
+  let radioButton = document.createElement("input");
+  radioButton.classList.add("form-check-input");
+  radioButton.name = "address";
+  radioButton.type = "radio";
+  radioButton.value = address["address_id"];
+  radioButton.id = address["address_id"];
+
+  let addressLable = document.createElement("label");
+  addressLable.classList.add("form-check-label");
+  addressLable.innerHTML = address["address"];
+  addressLable.htmlFor = address["address_id"];
+
+  selectAddress.appendChild(radioButton);
+  selectAddress.appendChild(addressLable);
+  selectAddress.appendChild(document.createElement("br"));
 }
 
 Order_now.addEventListener("click", () => {
@@ -53,7 +125,6 @@ function createCartItem(cartItem) {
   cartItem.quantity = parseInt(cartItem.quantity);
   cartItem.price = parseInt(cartItem.price);
   cartItem.stock = parseInt(cartItem.stock);
-  console.log(cartItem.quantity , cartItem.stock,cartItem.quantity <= cartItem.stock);
   const status = cartItem.quantity <= cartItem.stock;
 
   total_amount += cartItem.quantity * cartItem.price;
@@ -67,7 +138,7 @@ function createCartItem(cartItem) {
   const productsImg = document.createElement("img");
   productsImg.classList.add("item");
   productsImg.classList.add("cart_product_img");
-  productsImg.src = 'uploads/'+ cartItem.imageurl;
+  productsImg.src = "uploads/" + cartItem.imageurl;
 
   const div1 = document.createElement("div");
   div1.classList.add("item");
@@ -113,7 +184,7 @@ function createCartItem(cartItem) {
     })
       .then((response) => response.json())
       .then((result) => {
-        if (result["msg"]=="Done") {
+        if (result["msg"] == "Done") {
           cartItem.quantity--;
           if (cartItem.quantity == 0) {
             cart_items.removeChild(cartItemBox);
@@ -122,8 +193,8 @@ function createCartItem(cartItem) {
           total_amount -= cartItem.price;
           grossPrice.innerHTML = `Rs. ${cartItem.price * cartItem.quantity}/-`;
           total_amount_tag.innerHTML = `Rs.${total_amount}/-`;
-        } else if(result['msg']=="Error") {
-          err.innerHTML = result['data'];
+        } else if (result["msg"] == "Error") {
+          err.innerHTML = result["data"];
         }
       });
   });
@@ -150,14 +221,14 @@ function createCartItem(cartItem) {
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        if (result["msg"]=="Done") {
+        if (result["msg"] == "Done") {
           cartItem.quantity++;
           quantity.innerHTML = cartItem.quantity;
           total_amount += cartItem.price;
           grossPrice.innerHTML = `Rs. ${cartItem.price * cartItem.quantity}/-`;
           total_amount_tag.innerHTML = `Rs.${total_amount}/-`;
-        } else if(result["msg"]=="Error") {
-          err.innerHTML = result['data'];
+        } else if (result["msg"] == "Error") {
+          err.innerHTML = result["data"];
         }
       });
   });
@@ -166,14 +237,13 @@ function createCartItem(cartItem) {
 
   const err = document.createElement("span");
   err.classList.add("error_span");
-  if (!status){
+  if (!status) {
     err.innerHTML = "Out of Stock";
-  } 
+  }
   div2.appendChild(err);
-  
-  div2.appendChild(document.createElement("br"));
-  div2.appendChild(document.createElement("br"));
 
+  div2.appendChild(document.createElement("br"));
+  div2.appendChild(document.createElement("br"));
 
   const removeItem = document.createElement("a");
   removeItem.classList.add("secondaryButton");
@@ -191,16 +261,16 @@ function createCartItem(cartItem) {
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        if (result["msg"]=="Done") {
+        if (result["msg"] == "Done") {
           cart_items.removeChild(cartItemBox);
-          cart_id_list = cart_id_list.filter((id)=>{
-            return id!=cartItem.cid;
-          })
+          cart_id_list = cart_id_list.filter((id) => {
+            return id != cartItem.cid;
+          });
           total_amount -= cartItem.price * cartItem.quantity;
 
           total_amount_tag.innerHTML = `Rs.${total_amount}/-`;
-        } else if(result['msg']=="Error") {
-            err.innerHTML=result['data'];
+        } else if (result["msg"] == "Error") {
+          err.innerHTML = result["data"];
         }
       });
   });
@@ -237,8 +307,6 @@ function createCartItem(cartItem) {
       alert("Please Fill the Address");
     }
   });
-
-  
 
   cartItemBox.appendChild(productsImg);
   cartItemBox.appendChild(div1);

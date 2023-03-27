@@ -10,12 +10,18 @@
 
                 <?php if (isset($_SESSION['name'])) { ?>
                     <li class="nav-item">
-                        <a class="nav-link active " href="cart">Cart</a>
+                        <a class="nav-link active aligin_center" href="cart"> <span class="material-symbols-outlined">
+                                shopping_cart
+                            </span>  Cart</a>
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link active dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <?= $_SESSION['name'] ?>
+                        <a class="nav-link active dropdown-toggle aligin_center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="material-symbols-outlined">
+                                <span class="material-symbols-outlined">
+                                    account_circle
+                                </span>
+                            </span> <?= $_SESSION['name'] ?>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="order_history">Order History</a></li>

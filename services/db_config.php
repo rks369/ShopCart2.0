@@ -42,7 +42,7 @@ class DataBase
         if ($res) {
             return 'Sucess';
         } else {
-            return 'Error';
+            return null;
         }
     }
 

@@ -13,10 +13,14 @@ include('views/partials/header.php'); ?>
 
         <sapn class="product_price" style="display: contents;" id="total_amount"></sapn>
         <span class="heading">Billing Addres</span>
-
-        <textarea class="form-control" name="address" id="billing_address" cols="10" rows="3"></textarea>
         <br>
-
+        <span class="error_span" id="error_msg"></span>
+        <div id="selectAddress" class="form-check"></div>
+        <br>
+        <textarea class="form-control" name="address" id="billing_address" cols="10" rows="2" placeholder="Add New Address"></textarea>
+        <br>
+        <a class="primaryButton" id="add_address">Add New Address</a>
+        <br>
         <a class="primaryButton" id="Order_now">Oder Now</a>
     </div>
 </div>

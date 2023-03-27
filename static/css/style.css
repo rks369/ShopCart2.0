@@ -27,4 +27,12 @@
 
 }
 
+.aligin_center{
+  display: flex;
+    align-items: center;
+}
 
+
+#selectAddress{
+  width: 100%;
+}

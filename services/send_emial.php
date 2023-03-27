@@ -1,9 +1,6 @@
+
 <?php
-  require 'Mailjet/src/Mailjet/Client.php';
-  require 'Mailjet/src/Mailjet/Config.php';
-  require 'Mailjet/src/Mailjet/Request.php';
-  require 'Mailjet/src/Mailjet/Response.php';
-  require 'Mailjet/src/Mailjet/Resources.php';
+  require 'vendor/autoload.php';
   use \Mailjet\Resources;
   $mj = new \Mailjet\Client('e5f5f2b06c3314dde4bba8ab4bb69672','b0b7729796c5e0c7d239ab175b0812a5',true,['version' => 'v3.1']);
   $body = [
@@ -15,7 +12,7 @@
         ],
         'To' => [
           [
-            'Email' => "ritesh8519147@jmieti.edu.in",
+            'Email' => "rkstuvwxyz@gmail.com",
             'Name' => "Ritesh"
           ]
         ],

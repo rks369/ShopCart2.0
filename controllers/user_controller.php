@@ -233,7 +233,7 @@ class UserController
 
         $userModel = new UserModel();
 
-        $result =  $userModel->decreaseQuantity( $body->cart_id);
+        $result =  $userModel->decreaseQuantity($body->cart_id);
 
         if ($result == 'Error') {
             $response->msg = 'Error';
@@ -254,7 +254,7 @@ class UserController
 
         $userModel = new UserModel();
 
-        $result =  $userModel->increaseQuantity( $body->cart_id);
+        $result =  $userModel->increaseQuantity($body->cart_id);
 
         if ($result == 'Error') {
             $response->msg = 'Error';
@@ -291,6 +291,52 @@ class UserController
             $response->msg = 'Error';
             $response->data = "Not Login";
         }
+
+        echo json_encode($response);
+    }
+
+    static function addAddress()
+    {
+        $response = new stdClass();
+
+        $body =  file_get_contents('php://input');
+        $body = json_decode($body);
+
+        $userModel = new UserModel();
+
+        $result =  $userModel->addAddress($_SESSION['id'], $body->address);
+        $res = $userModel->getAddress($_SESSION['id']);
+        $res = array_reverse($res);
+        if ($result) {
+            $response->msg = 'Done';
+            $response->data = $res[0];
+            
+        } else {
+            $response->msg = 'Error';
+            $response->data = "Something Went Wrong !!!";
+        }
+
+        echo json_encode($response);
+    }
+
+    static function getAddress()
+    {
+        $response = new stdClass();
+
+
+        $userModel = new UserModel();
+
+        $result =  $userModel->getAddress($_SESSION['id']);
+
+        if ($result) {
+            $response->msg = 'Done';
+            $response->data = $result;
+            $response->result= $result;
+        } else {
+            $response->msg = 'Error';
+            $response->data = "Something Went Wrong !!!";
+        }
+
 
         echo json_encode($response);
     }

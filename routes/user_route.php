@@ -66,3 +66,11 @@ $router->post('/increaseQuantity', function () {
 $router->get('/cartItems', function () {
     UserController::getCartItems();
 });
+
+$router->post('/addAddress', function () {
+    UserController::addAddress();
+});
+
+$router->get('/getAddress', function () {
+    UserController::getAddress();
+});
