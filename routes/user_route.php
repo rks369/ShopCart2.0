@@ -50,3 +50,7 @@ $router->post('/getProduct', function () {
 $router->post('/addToCart', function () {
     UserController::addToCart();
 });
+
+$router->post('/removeFromCart', function () {
+    UserController::removeFromCart();
+});

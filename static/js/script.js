@@ -87,24 +87,23 @@ function createProductItem(product) {
         .then((response) => response.json())
         .then((result) => {
           console.log(result);
-          if (result["msg"]=='Done') {
+          if (result["msg"] == "Done") {
             addToCart.innerHTML = "Remove From Cart";
           } else if (result["msg"] == "Error") {
-            if(result['data']=='Not Login')
-            {
+            if (result["data"] == "Not Login") {
               window.location.href = "./login";
-            }else {
+            } else {
               alert("Something Went Wrong");
             }
-          } 
+          }
         });
-    } else if (p.innerHTML == "Remove From Cart") {
+    } else if (addToCart.innerHTML == "Remove From Cart") {
       fetch("/removeFromCart", {
         method: "POST",
         headers: {
           "Content-type": "application/json;charset=utf-8",
         },
-        body: JSON.stringify({ pid: product.pid }),
+        body: JSON.stringify({ product_id: product.product_id }),
       })
         .then((response) => response.json())
         .then((result) => {
@@ -196,7 +195,7 @@ function createProductItem(product) {
               headers: {
                 "Content-type": "application/json;charset=utf-8",
               },
-              body: JSON.stringify({ pid: product.pid }),
+              body: JSON.stringify({ product_id: product.product_id }),
             })
               .then((response) => response.json())
               .then((result) => {

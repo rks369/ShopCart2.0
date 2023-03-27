@@ -25,6 +25,7 @@ class DataBase
             return null;
         }
     }
+
     public function select($table, $conditions = array())
     {
         $res =  pg_select($this->connection, $table, $conditions);
@@ -44,9 +45,20 @@ class DataBase
             return 'Error';
         }
     }
+
     public function update($table, $data,$condition)
     {
         $res =  pg_update($this->connection, $table, $data,$condition);
+        if ($res) {
+            return 'Sucess';
+        } else {
+            return 'Error';
+        }
+    }
+
+    public function delete($table,$condition)
+    {
+        $res =  pg_delete($this->connection, $table,$condition);
         if ($res) {
             return 'Sucess';
         } else {

@@ -173,7 +173,6 @@ class UserController
     {
         $response = new stdClass();
 
-
         if(isset($_SESSION['id'])){
 
             $body =  file_get_contents('php://input');
@@ -188,7 +187,7 @@ class UserController
                 $response->data = "Something Went Wrong !!!";
             } else {
                 $response->msg = 'Done';
-                $response->data = 'Add To Cart SucessFullt !!!';
+                $response->data = 'Add To Cart SucessFully !!!';
             }
         }else
         {
@@ -196,7 +195,34 @@ class UserController
             $response->data = "Not Login";
         }
 
+        echo json_encode($response);
+    }
 
+    static function removeFromCart()
+    {
+        $response = new stdClass();
+
+        if(isset($_SESSION['id'])){
+
+            $body =  file_get_contents('php://input');
+            $body = json_decode($body);
+    
+            $userModel = new UserModel();
+    
+            $result =  $userModel->removeFromCart($_SESSION['id'], $body->product_id);
+    
+            if ($result == 'Error') {
+                $response->msg = 'Error';
+                $response->data = "Something Went Wrong !!!";
+            } else {
+                $response->msg = 'Done';
+                $response->data = 'Remove From Cart SucessFully !!!';
+            }
+        }else
+        {
+            $response->msg = 'Error';
+            $response->data = "Not Login";
+        }
 
         echo json_encode($response);
     }

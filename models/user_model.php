@@ -69,10 +69,7 @@ class UserModel
         $result = $this->db->select('cart', ['user_id' => $user_id, 'product_id' => $product_id]);
 
         if ($result) {
-            $result = $this->db->update('cart', ['quantity' => $result[0]['quantity'] + 1], ['cart_id' => $result[0]['cart_id']]);
-            if ($result) {
-                return "Done";
-            }
+            return  $this->updateCart($result[0]['cart_id'],$result[0]['quantity']+1);
         } else {
             $ret = $this->db->insert('cart', ['user_id' => $user_id, 'product_id' => $product_id]);
             if ($ret) {
@@ -81,5 +78,33 @@ class UserModel
         }
 
         return "Error";
+    }
+
+    public function removeFromCart(string $user_id, string $product_id): string
+    {
+        $result = $this->db->select('cart', ['user_id' => $user_id, 'product_id' => $product_id]);
+
+        if ($result) {
+            if ($result[0]['quantity'] > 1) {
+            return  $this->updateCart($result[0]['cart_id'],$result[0]['quantity']-1);
+            } else {
+                $ret = $this->db->delete('cart', ['cart_id' => $result[0]['cart_id']]);
+                if ($ret) {
+                    return "Done";
+                }
+            }
+        }
+        return "Error";
+    }
+
+    public function updateCart(string $cart_id, int $quantity): string
+    {
+        $result = $this->db->update('cart', ['quantity' => $quantity], ['cart_id' => $cart_id]);
+        if ($result) {
+            return "Done";
+        } else {
+
+            return "Error";
+        }
     }
 }
