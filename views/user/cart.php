@@ -22,6 +22,6 @@ include('views/partials/header.php'); ?>
 </div>
 
 
-<script src="cart.js"></script>
+<script src="static/js/cart.js"></script>
 <?php
 include('views/partials/tail.php');

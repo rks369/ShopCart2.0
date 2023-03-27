@@ -54,3 +54,15 @@ $router->post('/addToCart', function () {
 $router->post('/removeFromCart', function () {
     UserController::removeFromCart();
 });
+
+$router->post('/decreaseQuantity', function () {
+    UserController::decreaseQuantity();
+});
+
+$router->post('/increaseQuantity', function () {
+    UserController::increaseQuantity();
+});
+
+$router->get('/cartItems', function () {
+    UserController::getCartItems();
+});

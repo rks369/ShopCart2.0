@@ -173,15 +173,15 @@ class UserController
     {
         $response = new stdClass();
 
-        if(isset($_SESSION['id'])){
+        if (isset($_SESSION['id'])) {
 
             $body =  file_get_contents('php://input');
             $body = json_decode($body);
-    
+
             $userModel = new UserModel();
-    
+
             $result =  $userModel->addToCart($_SESSION['id'], $body->product_id);
-    
+
             if ($result == 'Error') {
                 $response->msg = 'Error';
                 $response->data = "Something Went Wrong !!!";
@@ -189,8 +189,7 @@ class UserController
                 $response->msg = 'Done';
                 $response->data = 'Add To Cart SucessFully !!!';
             }
-        }else
-        {
+        } else {
             $response->msg = 'Error';
             $response->data = "Not Login";
         }
@@ -202,15 +201,15 @@ class UserController
     {
         $response = new stdClass();
 
-        if(isset($_SESSION['id'])){
+        if (isset($_SESSION['id'])) {
 
             $body =  file_get_contents('php://input');
             $body = json_decode($body);
-    
+
             $userModel = new UserModel();
-    
+
             $result =  $userModel->removeFromCart($_SESSION['id'], $body->product_id);
-    
+
             if ($result == 'Error') {
                 $response->msg = 'Error';
                 $response->data = "Something Went Wrong !!!";
@@ -218,8 +217,77 @@ class UserController
                 $response->msg = 'Done';
                 $response->data = 'Remove From Cart SucessFully !!!';
             }
-        }else
-        {
+        } else {
+            $response->msg = 'Error';
+            $response->data = "Not Login";
+        }
+
+        echo json_encode($response);
+    }
+    static function decreaseQuantity()
+    {
+        $response = new stdClass();
+
+        $body =  file_get_contents('php://input');
+        $body = json_decode($body);
+
+        $userModel = new UserModel();
+
+        $result =  $userModel->decreaseQuantity( $body->cart_id);
+
+        if ($result == 'Error') {
+            $response->msg = 'Error';
+            $response->data = "Something Went Wrong !!!";
+        } else {
+            $response->msg = 'Done';
+            $response->data = 'Decrease Cart item By 1 SucessFully !!!';
+        }
+
+        echo json_encode($response);
+    }
+    static function increaseQuantity()
+    {
+        $response = new stdClass();
+
+        $body =  file_get_contents('php://input');
+        $body = json_decode($body);
+
+        $userModel = new UserModel();
+
+        $result =  $userModel->increaseQuantity( $body->cart_id);
+
+        if ($result == 'Error') {
+            $response->msg = 'Error';
+            $response->data = "Something Went Wrong !!!";
+        } else if ($result == 'Out Of Stock') {
+            $response->msg = 'Error';
+            $response->data = 'Item Is Out Of Stock !!!';
+        } else {
+            $response->msg = 'Done';
+            $response->data = 'Increase Cart item By 1 SucessFully !!!';
+        }
+
+        echo json_encode($response);
+    }
+
+    static function getCartItems()
+    {
+        $response = new stdClass();
+
+        if (isset($_SESSION['id'])) {
+
+            $userModel = new UserModel();
+
+            $result =  $userModel->cartItems($_SESSION['id']);
+
+            if ($result) {
+                $response->msg = 'Done';
+                $response->data = $result;
+            } else {
+                $response->msg = 'Error';
+                $response->data = "Something Went Wrong !!!";
+            }
+        } else {
             $response->msg = 'Error';
             $response->data = "Not Login";
         }

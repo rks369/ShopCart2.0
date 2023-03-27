@@ -69,7 +69,7 @@ class UserModel
         $result = $this->db->select('cart', ['user_id' => $user_id, 'product_id' => $product_id]);
 
         if ($result) {
-            return  $this->updateCart($result[0]['cart_id'],$result[0]['quantity']+1);
+            return  $this->updateCart($result[0]['cart_id'], $result[0]['quantity'] + 1);
         } else {
             $ret = $this->db->insert('cart', ['user_id' => $user_id, 'product_id' => $product_id]);
             if ($ret) {
@@ -85,14 +85,41 @@ class UserModel
         $result = $this->db->select('cart', ['user_id' => $user_id, 'product_id' => $product_id]);
 
         if ($result) {
+            $ret = $this->db->delete('cart', ['cart_id' => $result[0]['cart_id']]);
+            if ($ret) {
+                return "Done";
+            }
+        }
+        return "Error";
+    }
+
+    public function decreaseQuantity(string $cart_id): string
+    {
+        $result = $this->db->select('cart', ['cart_id' => $cart_id]);
+
+        if ($result) {
             if ($result[0]['quantity'] > 1) {
-            return  $this->updateCart($result[0]['cart_id'],$result[0]['quantity']-1);
+                return  $this->updateCart($result[0]['cart_id'], $result[0]['quantity'] - 1);
             } else {
                 $ret = $this->db->delete('cart', ['cart_id' => $result[0]['cart_id']]);
                 if ($ret) {
                     return "Done";
                 }
             }
+        }
+        return "Error";
+    }
+    public function increaseQuantity(string $cart_id): string
+    {
+        $result = $this->db->select('cart', ['cart_id' => $cart_id]);
+
+        $productDetails = $this->db->select('products', ['product_id' => $result[0]['product_id']]);
+
+        if ($productDetails[0]['stock'] - $result[0]['quantity'] > 0) {
+
+            return  $this->updateCart($result[0]['cart_id'], $result[0]['quantity'] + 1);
+        } else {
+            return "Out Of Stock";
         }
         return "Error";
     }
@@ -106,5 +133,10 @@ class UserModel
 
             return "Error";
         }
+    }
+
+    public function cartItems(string $user_id): array|null
+    {
+        return $this->db->execute("SELECT * FROM cart JOIN products ON cart.product_id = products.product_id WHERE cart.user_id = $user_id;");
     }
 }
