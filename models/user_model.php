@@ -63,4 +63,23 @@ class UserModel
         }
         return NULL;
     }
+
+    public function addToCart(string $user_id, string $product_id): string
+    {
+        $result = $this->db->select('cart', ['user_id' => $user_id, 'product_id' => $product_id]);
+
+        if ($result) {
+            $result = $this->db->update('cart', ['quantity' => $result[0]['quantity'] + 1], ['cart_id' => $result[0]['cart_id']]);
+            if ($result) {
+                return "Done";
+            }
+        } else {
+            $ret = $this->db->insert('cart', ['user_id' => $user_id, 'product_id' => $product_id]);
+            if ($ret) {
+                return "Done";
+            }
+        }
+
+        return "Error";
+    }
 }

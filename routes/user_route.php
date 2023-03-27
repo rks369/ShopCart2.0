@@ -42,6 +42,11 @@ $router->get('/logout', function () {
 $router->post('/product', function () {
     UserController::getProductList();
 });
+
 $router->post('/getProduct', function () {
     UserController::getProduct();
+});
+
+$router->post('/addToCart', function () {
+    UserController::addToCart();
 });

@@ -106,11 +106,11 @@ class UserController
 
         $user = $userModel->getUser($body->email);
         if ($user && $user->password == $userDetails['password']) {
-            
-            $_SESSION['id'] = $user->status == '1' ? $user->id: '-1';
+
+            $_SESSION['id'] = $user->status == '1' ? $user->id : '-1';
             $_SESSION['name'] = $user->name;
             $_SESSION['role'] = 'user';
-            
+
             $response->msg = 'Done';
             $response->data = $user->toArray();
         } else {
@@ -134,7 +134,7 @@ class UserController
 
         $productModel = new ProductModel();
 
-        $productList =  $productModel->getProducts($curremt_index,$count);
+        $productList =  $productModel->getProducts($curremt_index, $count);
 
         if (count($productList) == 0) {
             $response->msg = 'Error';
@@ -147,6 +147,7 @@ class UserController
 
         echo json_encode($response);
     }
+
     static function getProduct()
     {
         $response = new stdClass();
@@ -163,6 +164,38 @@ class UserController
             $response->msg = 'Done';
             $response->data = $productList[0];
         }
+
+
+        echo json_encode($response);
+    }
+
+    static function addToCart()
+    {
+        $response = new stdClass();
+
+
+        if(isset($_SESSION['id'])){
+
+            $body =  file_get_contents('php://input');
+            $body = json_decode($body);
+    
+            $userModel = new UserModel();
+    
+            $result =  $userModel->addToCart($_SESSION['id'], $body->product_id);
+    
+            if ($result == 'Error') {
+                $response->msg = 'Error';
+                $response->data = "Something Went Wrong !!!";
+            } else {
+                $response->msg = 'Done';
+                $response->data = 'Add To Cart SucessFullt !!!';
+            }
+        }else
+        {
+            $response->msg = 'Error';
+            $response->data = "Not Login";
+        }
+
 
 
         echo json_encode($response);
