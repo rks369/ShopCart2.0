@@ -91,6 +91,11 @@ class UserModel
         return $this->db->update('users', ['status' => $status], ['user_id' => $user_id]);
     }
 
+    public function updaetToken(string $user_id, string $token)
+    {
+        return $this->db->update('users', ['token' => $token], ['user_id' => $user_id]);
+    }
+
     public function changePassword(string $user_id, string $password)
     {
         return $this->db->update('users', ['password' => $password], ['user_id' => $user_id]);

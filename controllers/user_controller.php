@@ -46,7 +46,7 @@ class UserController
 
     static function getForgotPasswordPage()
     {
-        require_once('views/user/login.php');
+        require_once('views/user/forgot_password.php');
     }
 
     static function signUp()
@@ -127,6 +127,23 @@ class UserController
         require_once('views/user/verify_email.php');
     }
 
+    static function verifyForgotPasswordLink()
+    {
+        $token = $_GET['token'];
+
+        $userModel = new UserModel();
+
+        $user = $userModel->getUserByToken($token);
+        if ($user) {
+            $_SESSION['id']=$user->id;
+            $_SESSION['forgot']=true;
+            require_once('views/user/change_password.php');
+        } else {
+            $message = "Invalid Credentials";
+            require_once('views/user/verify_email.php');
+        }
+    }
+
     static function login()
     {
 
@@ -189,9 +206,55 @@ class UserController
                 $response->msg = "Done";
                 $response->data = "Can't Able to send Mail At This Time";
             }
+            
+            if(isset( $_SESSION['forgot'])){
+                session_destroy();
+            }
         } else {
             $response->msg = "Error";
             $response->data = "Password Not Changed !!!";
+        }
+
+        echo json_encode($response);
+    }
+
+    static function forgotPassword()
+    {
+
+        $response = new stdClass();
+
+        $body = file_get_contents('php://input');
+        $body = json_decode($body, true);
+
+        $userModel = new UserModel();
+        $user = $userModel->getUser($body['email']);
+        if ($user) {
+
+            $newToken = time();
+
+            $updateToken = $userModel->updaetToken($user->id, $newToken);
+            if ($updateToken) {
+                $mailBody = <<<TEXT
+                <h1>Reset Your Password!!</h1?
+    
+                <h3><a href='http://localhost:8000/forgotPasswordUrl?token=${newToken}' >Reset</a></h3>
+            TEXT;
+                $isSent = sendMail($user->email, $user->name, 'Reset your Password!!!', $mailBody);
+
+                if ($isSent) {
+                    $response->msg = "Done";
+                    $response->data = "Password Changed Sucessfully !!!";
+                } else {
+                    $response->msg = "Done";
+                    $response->data = "Can't Able to send Mail At This Time";
+                }
+            } else {
+                $response->msg = "Error";
+                $response->data = "Something went Wrong!!!";
+            }
+        } else {
+            $response->msg = "Error";
+            $response->data = "No Account Found With This Email !!!";
         }
 
         echo json_encode($response);
@@ -410,7 +473,6 @@ class UserController
             $response->msg = 'Error';
             $response->data = "Something Went Wrong !!!";
         }
-
 
         echo json_encode($response);
     }

@@ -23,6 +23,10 @@ $router->get('/forgot_password', function () {
     UserController::getForgotPasswordPage();
 });
 
+$router->post('/forgot_password', function () {
+    UserController::forgotPassword();
+});
+
 $router->get('/cart', function () {
     UserController::getCartPage();
 });

@@ -27,6 +27,6 @@ include('views/partials/header.php');?>
         <br>
     </div>
 </div>
-<script src="forgot_password.js"></script>
+<script src="static/js/forgot_password.js"></script>
 <?php
 include('views/partials/tail.php');
