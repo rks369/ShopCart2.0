@@ -64,6 +64,25 @@ class UserModel
         return NULL;
     }
 
+    public function getUserByToken(string $token): User|NULL
+    {
+        $condition = array();
+
+        $condition['token'] = $token;
+        $ret = $this->db->select('users', $condition);
+
+        if ($ret) {
+            $user = new User($ret[0]);
+            return $user;
+        }
+        return NULL;
+    }
+
+    public function updateStatus(string $user_id, string $status)
+    {
+        return $this->db->update('users', ['status' => $status], ['user_id' => $user_id]);
+    }
+
     public function addToCart(string $user_id, string $product_id): string
     {
         $result = $this->db->select('cart', ['user_id' => $user_id, 'product_id' => $product_id]);

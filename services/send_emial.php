@@ -1,8 +1,14 @@
 
 <?php
-  require 'vendor/autoload.php';
-  use \Mailjet\Resources;
-  $mj = new \Mailjet\Client('e5f5f2b06c3314dde4bba8ab4bb69672','b0b7729796c5e0c7d239ab175b0812a5',true,['version' => 'v3.1']);
+require 'vendor/autoload.php';
+
+use \Mailjet\Resources;
+
+function sendMail(string $to, string $name, string $subject, string $body): bool
+{
+
+  $mj = new \Mailjet\Client('e5f5f2b06c3314dde4bba8ab4bb69672', 'b0b7729796c5e0c7d239ab175b0812a5', true, ['version' => 'v3.1']);
+
   $body = [
     'Messages' => [
       [
@@ -12,17 +18,17 @@
         ],
         'To' => [
           [
-            'Email' => "rkstuvwxyz@gmail.com",
-            'Name' => "Ritesh"
+            'Email' => $to,
+            'Name' => $name
           ]
         ],
-        'Subject' => "Greetings from Mailjet.",
-        'TextPart' => "My first Mailjet email",
-        'HTMLPart' => "<h3>Dear passenger 1, welcome to <a href='https://www.mailjet.com/'>Mailjet</a>!</h3><br />May the delivery force be with you!",
-        'CustomID' => "AppGettingStartedTest"
+        'Subject' => $subject,
+        'HTMLPart' => $body,
       ]
     ]
   ];
   $response = $mj->post(Resources::$Email, ['body' => $body]);
-  $response->success() && var_dump($response->getData());
+  return $response->success();
+}
+
 ?>

@@ -1,7 +1,7 @@
 <?php
 require_once('models/user_model.php');
 
-
+require_once('services/send_emial.php');
 
 class UserController
 {
@@ -65,29 +65,70 @@ class UserController
         $userDetails['email'] = $body->email;
         $userDetails['mobile'] = $body->mobile;
         $userDetails['password'] = $body->password;
+        $userDetails['token'] = time();
 
         $user = $userModel->getUser($body->email);
+
 
         if ($user) {
             $response->msg = 'Error';
             $response->data = 'User Already Exits!!!';
         } else {
 
-            $result = $userModel->addUser($userDetails);
-            if ($result) {
-                $_SESSION['id'] =  '-1';
-                $_SESSION['name'] = $userDetails['name'];
-                $response->msg = 'Done';
-                $response->data = 'User Added Sucessfully!!!';
+            $mailBody = <<<TEXT
+                <h1>Verify Your Mail First !!!</h1?
+    
+                <h3><a href='http://localhost:8000/verifyEmail?token=${userDetails['token']}' >Verify</a></h3>
+            TEXT;
+
+            $isSent = sendMail($userDetails['email'], $userDetails['name'], 'Verify your Email !!!', $mailBody);
+
+            if ($isSent) {
+                $result = $userModel->addUser($userDetails);
+                if ($result) {
+                    $_SESSION['id'] =  '-1';
+                    $_SESSION['name'] = $userDetails['name'];
+                    $response->msg = 'Done';
+                    $response->data = 'User Added Sucessfully!!!';
+                } else {
+                    $response->msg = 'Error';
+                    $response->data = 'Something Went Wrong !!!';
+                }
             } else {
                 $response->msg = 'Error';
-                $response->data = 'Something Went Wrong !!!';
+                $response->data = "Can't Able To Send Mail At This time.Please Try After Sometime";
             }
         }
 
 
         echo json_encode($response);
     }
+
+    static function verifyEmial()
+    {
+        $token = $_GET['token'];
+
+        $userModel =new UserModel();
+        
+        $user = $userModel->getUserByToken($token);
+        $message = '';
+        if($user)
+        {
+            $result = $userModel->updateStatus($user->id,1); 
+            if($result)
+            {
+
+                $message = "Mail Is Verified";
+            }else{
+                $message = "Something Went Wrong";
+            }
+        }else{
+            $message = "Invalid Credentials";
+        }
+
+        require_once('views/user/verify_email.php');
+    }
+
     static function login()
     {
 
@@ -310,7 +351,6 @@ class UserController
         if ($result) {
             $response->msg = 'Done';
             $response->data = $res[0];
-            
         } else {
             $response->msg = 'Error';
             $response->data = "Something Went Wrong !!!";
@@ -331,7 +371,7 @@ class UserController
         if ($result) {
             $response->msg = 'Done';
             $response->data = $result;
-            $response->result= $result;
+            $response->result = $result;
         } else {
             $response->msg = 'Error';
             $response->data = "Something Went Wrong !!!";
