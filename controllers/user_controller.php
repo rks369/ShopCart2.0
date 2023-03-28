@@ -108,21 +108,19 @@ class UserController
     {
         $token = $_GET['token'];
 
-        $userModel =new UserModel();
-        
+        $userModel = new UserModel();
+
         $user = $userModel->getUserByToken($token);
         $message = '';
-        if($user)
-        {
-            $result = $userModel->updateStatus($user->id,1); 
-            if($result)
-            {
+        if ($user) {
+            $result = $userModel->updateStatus($user->id, 1);
+            if ($result) {
 
                 $message = "Mail Is Verified";
-            }else{
+            } else {
                 $message = "Something Went Wrong";
             }
-        }else{
+        } else {
             $message = "Invalid Credentials";
         }
 
@@ -163,6 +161,42 @@ class UserController
 
         echo json_encode($response);
     }
+
+    static function changePassword()
+    {
+
+        $response = new stdClass();
+
+        $body = file_get_contents('php://input');
+        $body = json_decode($body, true);
+
+        $userModel = new UserModel();
+        $user = $userModel->getUserByID($_SESSION['id']);
+        $result = $userModel->changePassword($_SESSION['id'], $body['password']);
+        if ($result) {
+            $mailBody = <<<TEXT
+            <h1>Password Changed Sucessfully !!!</h1>
+
+            <h3><a href='login' >Login</a></h3>
+        TEXT;
+
+            $isSent = sendMail($user->email, $user->name, 'Password Chnaged Sucessfully !!!', $mailBody);
+
+            if ($isSent) {
+                $response->msg = "Done";
+                $response->data = "Password Changed Sucessfully !!!";
+            } else {
+                $response->msg = "Done";
+                $response->data = "Can't Able to send Mail At This Time";
+            }
+        } else {
+            $response->msg = "Error";
+            $response->data = "Password Not Changed !!!";
+        }
+
+        echo json_encode($response);
+    }
+
     static function getProductList()
     {
         $response = new stdClass();

@@ -15,6 +15,10 @@ $router->get('/change_password', function () {
     UserController::getChangePasswordPage();
 });
 
+$router->post('/change_password', function () {
+    UserController::changePassword();
+});
+
 $router->get('/forgot_password', function () {
     UserController::getForgotPasswordPage();
 });

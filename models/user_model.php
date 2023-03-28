@@ -52,10 +52,18 @@ class UserModel
 
     public function getUser(string $email): User|NULL
     {
-        $condition = array();
+        $ret = $this->db->select('users', ['email'=>$email]);
 
-        $condition['email'] = $email;
-        $ret = $this->db->select('users', $condition);
+        if ($ret) {
+            $user = new User($ret[0]);
+            return $user;
+        }
+        return NULL;
+    }
+
+    public function getUserByID(string $id): User|NULL
+    {
+        $ret = $this->db->select('users', ['user_id'=>$id]);
 
         if ($ret) {
             $user = new User($ret[0]);
@@ -81,6 +89,11 @@ class UserModel
     public function updateStatus(string $user_id, string $status)
     {
         return $this->db->update('users', ['status' => $status], ['user_id' => $user_id]);
+    }
+
+    public function changePassword(string $user_id, string $password)
+    {
+        return $this->db->update('users', ['password' => $password], ['user_id' => $user_id]);
     }
 
     public function addToCart(string $user_id, string $product_id): string
