@@ -242,14 +242,20 @@ function createProductUI(product) {
       headers: {
         "Content-type": "application/json;charset=utf-8",
       },
-      body: JSON.stringify({ product_id: product.pid }),
+      body: JSON.stringify({ product_id: product.product_id }),
     })
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        result["data"].forEach((orderDetails) => {
-          createOrderDetailsTile(orderDetails);
-        });
+        if(result['msg']=="Done")
+        {
+          result["data"].forEach((orderDetails) => {
+            createOrderDetailsTile(orderDetails);
+          });
+        }else if(result['msg']=="Error")
+        {
+          alert(result['data']);
+        }
       });
   });
 
@@ -275,17 +281,17 @@ function createOrderDetailsTile(orderDetails) {
   orderrow.appendChild(rowValue2);
 
   const rowValue3 = document.createElement("td");
-  rowValue3.innerHTML = JSON.parse(orderDetails.billing_address)["address"];
+  rowValue3.innerHTML = orderDetails.address;
   orderrow.appendChild(rowValue3);
 
   const rowValue4 = document.createElement("td");
   rowValue4.innerHTML = new Date(orderDetails.order_time).toLocaleDateString();
   orderrow.appendChild(rowValue4);
 
-  let status = JSON.parse(orderDetails.activity);
-  const rowValue5 = document.createElement("td");
-  rowValue5.innerHTML = status[status.length - 1]["title"];
-  orderrow.appendChild(rowValue5);
+  // let status = JSON.parse(orderDetails.activity);
+  // const rowValue5 = document.createElement("td");
+  // rowValue5.innerHTML = status[status.length - 1]["title"];
+  // orderrow.appendChild(rowValue5);
 
   order_items_list.appendChild(orderrow);
 }

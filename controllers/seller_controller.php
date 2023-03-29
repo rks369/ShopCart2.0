@@ -238,6 +238,31 @@ class SellerController
         echo json_encode($response);
     }
 
+    static function productOrders()
+    {
+        $response = new stdClass();
+
+        $body =  file_get_contents('php://input');
+        $body = json_decode($body, true);
+
+        $product_id = $body['product_id'];
+
+            $productModel = new ProductModel();
+
+            $result =  $productModel->productOrders($product_id);
+
+            if ($result) {
+                $response->msg = 'Done';
+                $response->data = $result;
+            } else {
+                $response->msg = 'Error';
+                $response->data = 'Something Went Wrong !!!';
+            }
+       
+
+        echo json_encode($response);
+    }
+
     static function logout()
     {
         session_destroy();

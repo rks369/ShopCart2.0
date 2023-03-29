@@ -108,4 +108,15 @@ class ProductModel
     {
         return $this->db->update('products', ['status' => $status], ['product_id' => $product_id]);
     }
+
+    public function productOrders($product_id)
+    {
+        try{
+            return $this->db->execute("SELECT name,quantity,address,order_time,activity FROM orders JOIN ORDER_ITEMS ON orders.order_id = order_items.order_id JOIN users ON users.user_id = orders.user_id JOIN address ON orders.billing_address=address.address_id Where product_id = $product_id;");
+
+        }catch(Exception $e)
+        {
+            return false;
+        }
+    }
 }

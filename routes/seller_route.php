@@ -47,3 +47,7 @@ $router->post('/seller/editProduct', function () {
 $router->post('/seller/updateProductStatus', function () {
     SellerController::updateProductStatus();
 });
+
+$router->post('/seller/productOrders', function () {
+    SellerController::productOrders();
+});
