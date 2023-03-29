@@ -78,7 +78,7 @@ function createOrderDetailsTile(orderDetails) {
     let li = document.createElement("li");
     li.innerHTML =
       activity.title +
-      "\n" +
+      "<br>" +
       new Date(activity.time).toLocaleDateString() +
       new Date(activity.time).toLocaleTimeString();
     ooderHistoryList.appendChild(li);
@@ -98,7 +98,7 @@ function createOrderDetailsTile(orderDetails) {
         status.push(newStatus);
         console.log(status);
 
-        fetch("/seller/updateStatus", {
+        fetch("updateOrderStatus", {
           method: "POST",
           headers: {
             "Content-type": "application/json;charset=utf-8",
@@ -111,15 +111,16 @@ function createOrderDetailsTile(orderDetails) {
           .then((response) => response.json())
           .then((result) => {
             console.log(result);
-            if (result["err"]) {
+            if (result["msg"]=="Error") {
+              alert(result['data'])
               status.remove(newStatus);
-            } else {
+            } else if(result['msg']=="Done"){
               let li = document.createElement("li");
               let t = Date.now();
 
               li.innerHTML =
                 updateInput.value.trim() +
-                "\n" +
+                "<br>" +
                 new Date(t).toLocaleDateString() +
                 new Date(t).toLocaleTimeString();
               ooderHistoryList.appendChild(li);

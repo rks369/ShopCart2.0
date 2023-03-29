@@ -59,3 +59,7 @@ $router->get('/seller/orders', function () {
 $router->post('/seller/orders', function () {
     SellerController::orders();
 });
+
+$router->post('/seller/updateOrderStatus', function () {
+    SellerController::updateOrderStatus();
+});

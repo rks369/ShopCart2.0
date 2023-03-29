@@ -302,6 +302,32 @@ class SellerController
         echo json_encode($response);
     }
 
+    static function updateOrderStatus()
+    {
+        $response = new stdClass();
+
+        $body =  file_get_contents('php://input');
+        $body = json_decode($body, true);
+
+        $order_item_id = $body['order_item_id'];
+        $status = json_encode($body['status']);
+
+            $sellerModel = new SellerModel();
+
+            $result =  $sellerModel->updateOrderStatus($order_item_id,$status);
+
+            if ($result!='error') {
+                $response->msg = 'Done';
+                $response->data = $result;
+            } else {
+                $response->msg = 'Error';
+                $response->data = 'Something Went Wrong !!!';
+            }
+       
+
+        echo json_encode($response);
+    }
+
     static function logout()
     {
         session_destroy();

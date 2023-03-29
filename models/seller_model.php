@@ -75,7 +75,19 @@ class SellerModel
     {
 
        try{
-           return $this->db->execute("SELECT name,products.product_id,products.title,quantity,address,order_time,activity FROM orders JOIN ORDER_ITEMS ON orders.order_id = order_items.order_id JOIN products ON products.product_id = order_items.product_id JOIN users ON users.user_id = orders.user_id JOIN address ON orders.billing_address=address.address_id WHERE products.seller_id =$seller_id ORDER BY order_time DESC LIMIT $row_count OFFSET $current_index;");
+           return $this->db->execute("SELECT order_item_id, name,products.product_id,products.title,quantity,address,order_time,activity FROM orders JOIN ORDER_ITEMS ON orders.order_id = order_items.order_id JOIN products ON products.product_id = order_items.product_id JOIN users ON users.user_id = orders.user_id JOIN address ON orders.billing_address=address.address_id WHERE products.seller_id =$seller_id ORDER BY order_time DESC LIMIT $row_count OFFSET $current_index;");
+       }catch(Exception $e)
+       {
+        echo $e;
+        return 'error';
+       }
+    }
+
+    public function updateOrderStatus(string $order_item_id,$status)
+    {
+
+       try{
+           return $this->db->execute("UPDATE order_items SET activity = '$status' WHERE order_item_id = $order_item_id");
        }catch(Exception $e)
        {
         echo $e;
