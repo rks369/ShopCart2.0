@@ -41,11 +41,13 @@ class Router
 
   private function invalidMethodHandler()
   {
+    echo'sdcsd';
     header("{$this->request->serverProtocol} 405 Method Not Allowed");
   }
 
   private function defaultRequestHandler()
   {
+    echo'sdcsd';
     header("{$this->request->serverProtocol} 404 Not Found");
   }
 

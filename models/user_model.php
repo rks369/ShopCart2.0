@@ -192,6 +192,15 @@ class UserModel
     {
         $result = [];
         try {
+            
+            $activity = new stdClass();
+
+            $activity->title = "Ordered";
+            $activity->time = time()*1000;
+
+
+            $activity = json_encode($activity);
+
             $this->db->beginTransaction();
             $order_insert =  $this->db->execute("INSERT INTO orders(user_id,billing_address,transaction_id) VALUES($user_id,$billing_address,121651) RETURNING order_id");
             $order_id = $order_insert[0]['order_id']; 
@@ -200,10 +209,9 @@ class UserModel
 
                 $cart = $cart_result[0];
 
-
                 $this->db->execute("UPDATE products SET stock = stock - {$cart['quantity']} WHERE product_id = {$cart['product_id']};");
 
-                $this->db->execute("INSERT INTO order_items(order_id,product_id,price,quantity,activity) VALUES($order_id,{$cart['product_id']},{$cart['price']},{$cart['quantity']},'{}');");
+                $this->db->execute("INSERT INTO order_items(order_id,product_id,price,quantity,activity) VALUES($order_id,{$cart['product_id']},{$cart['price']},{$cart['quantity']},'[$activity]');");
 
                 $this->db->execute("DELETE FROM cart WHERE cart_id = {$cart['cart_id']}");
             }
