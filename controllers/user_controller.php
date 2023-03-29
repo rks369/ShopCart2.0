@@ -486,7 +486,7 @@ class UserController
 
         $userModel = new UserModel();
 
-        $result = $userModel->order($_SESSION['id'],$body['cart_id_list'],$body['address']);
+        $result = $userModel->order($_SESSION['id'],$body['cart_id_list'],$body['billing_address']);
 
         $response->msg = 'Done';
         $response->data = $result;

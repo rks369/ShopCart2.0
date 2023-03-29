@@ -224,7 +224,7 @@ class UserModel
      
         try{
 
-           $result= $this->db->execute("SELECT * FROM ORDERS JOIN address ON orders.billing_address = address.address_id WHERE orders.user_id = $user_id;");
+           $result= $this->db->execute("SELECT * FROM ORDERS JOIN address ON orders.billing_address = address.address_id WHERE orders.user_id = $user_id ORDER BY order_time DESC;");
            
            return $result;
         }catch(Exception $e)

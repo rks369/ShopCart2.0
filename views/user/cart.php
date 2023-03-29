@@ -15,7 +15,9 @@ include('views/partials/header.php'); ?>
         <span class="heading">Billing Addres</span>
         <br>
         <span class="error_span" id="error_msg"></span>
-        <div id="selectAddress" class="form-check"></div>
+        <select id="selectAddress" class="form-select">
+            <option value="-1" default>Select Billing Address</option>
+        </select>
         <br>
         <textarea class="form-control" name="address" id="billing_address" cols="10" rows="2" placeholder="Add New Address"></textarea>
         <br>

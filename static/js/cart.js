@@ -75,29 +75,43 @@ function getAddressList() {
     });
 }
 
+// function createAddressTile(address) {
+//   let radioButton = document.createElement("input");
+//   radioButton.classList.add("form-check-input");
+//   radioButton.name = "address";
+//   radioButton.type = "radio";
+//   radioButton.value = address["address_id"];
+//   radioButton.id = address["address_id"];
+
+//   let addressLable = document.createElement("label");
+//   addressLable.classList.add("form-check-label");
+//   addressLable.innerHTML = address["address"];
+//   addressLable.htmlFor = address["address_id"];
+
+//   selectAddress.appendChild(radioButton);
+//   selectAddress.appendChild(addressLable);
+//   selectAddress.appendChild(document.createElement("br"));
+// }
+
+
 function createAddressTile(address) {
-  let radioButton = document.createElement("input");
-  radioButton.classList.add("form-check-input");
-  radioButton.name = "address";
-  radioButton.type = "radio";
-  radioButton.value = address["address_id"];
-  radioButton.id = address["address_id"];
-
-  let addressLable = document.createElement("label");
-  addressLable.classList.add("form-check-label");
-  addressLable.innerHTML = address["address"];
-  addressLable.htmlFor = address["address_id"];
-
-  selectAddress.appendChild(radioButton);
-  selectAddress.appendChild(addressLable);
-  selectAddress.appendChild(document.createElement("br"));
+  let option = document.createElement("option");
+  option.classList.add("form-check-input");
+  option.innerHTML = address['address'];
+  option.value = address["address_id"];
+  option.id = address["address_id"];
+  selectAddress.appendChild(option);
 }
 
+
+
 Order_now.addEventListener("click", () => {
-  if (billing_address.value.trim() != "") {
+  if (selectAddress.value==-1) {
+    alert("Please Fill the Address");
+  } else {
     let reqObj = {
       cart_id_list: cart_id_list,
-      address: { address: billing_address.value.trim() },
+      billing_address: selectAddress.value,
     };
     console.log(reqObj);
     fetch("/order", {
@@ -117,8 +131,6 @@ Order_now.addEventListener("click", () => {
         }
         console.log(result);
       });
-  } else {
-    alert("Please Fill the Address");
   }
 });
 
@@ -283,10 +295,12 @@ function createCartItem(cartItem) {
 
   buyNow.addEventListener("click", () => {
     console.log()
-    if (true) {
+    if (selectAddress.value==-1) {
+      alert("Please Fill the Address");
+    } else {
       let reqObj = {
         cart_id_list: [cartItem.cart_id],
-        address: 16,
+        billing_address: selectAddress.value,
       };
       console.log(reqObj);
       fetch("/order", {
@@ -305,8 +319,6 @@ function createCartItem(cartItem) {
           }
           console.log(result);
         });
-    } else {
-      alert("Please Fill the Address");
     }
   });
 
