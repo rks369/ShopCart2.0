@@ -1,7 +1,7 @@
 const load_more_orders = document.getElementById("load_more_orders");
 let order_finished = false;
 let current_index = 0;
-const row_count = 10;
+const row_count = 5;
 
 getOrderDetails();
 
@@ -12,7 +12,7 @@ load_more_orders.addEventListener("click", () => {
 });
 
 function getOrderDetails() {
-  fetch("/seller/allOrders", {
+  fetch("orders", {
     method: "POST",
     headers: {
       "Content-type": "application/json;charset=utf-8",
@@ -23,15 +23,22 @@ function getOrderDetails() {
     .then((result) => {
       current_index += row_count;
       console.log(result);
-      if (result["data"].length == 0) {
-        order_finished = true;
-        load_more_orders.innerHTML = "No More Orders";
-        load_more_orders.classList.remove("primaryButton");
-        load_more_orders.classList.add("secondaryButton");
+      if(result['msg']=="Done")
+      {
+
+        if (result["data"].length == 0) {
+          order_finished = true;
+          load_more_orders.innerHTML = "No More Orders";
+          load_more_orders.classList.remove("primaryButton");
+          load_more_orders.classList.add("secondaryButton");
+        }
+        result["data"].forEach((orderDetails) => {
+          createOrderDetailsTile(orderDetails);
+        });
+      }else if(result['msg']=="Error")
+      {
+        alert(result['data']);
       }
-      result["data"].forEach((orderDetails) => {
-        createOrderDetailsTile(orderDetails);
-      });
     });
 }
 
@@ -43,7 +50,7 @@ function createOrderDetailsTile(orderDetails) {
   orderrow.appendChild(name);
 
   const productId = document.createElement("td");
-  productId.innerHTML = orderDetails.pid;
+  productId.innerHTML = orderDetails.product_id;
   orderrow.appendChild(productId);
 
   const title = document.createElement("td");
@@ -55,7 +62,7 @@ function createOrderDetailsTile(orderDetails) {
   orderrow.appendChild(quantity);
 
   const address = document.createElement("td");
-  address.innerHTML = JSON.parse(orderDetails.billing_address)["address"];
+  address.innerHTML = orderDetails.address;
   orderrow.appendChild(address);
 
   const orderTime = document.createElement("td");

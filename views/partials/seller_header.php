@@ -17,7 +17,7 @@
               <?= $_SESSION['name'] ?> 
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Orders</a></li>
+              <li><a class="dropdown-item" href="orders">Orders</a></li>
               <li><a class="dropdown-item" href="change_password">Chnage Password</a></li>
               <li><a class="dropdown-item" href="logout">Logout</a></li>
             </ul>

@@ -51,3 +51,11 @@ $router->post('/seller/updateProductStatus', function () {
 $router->post('/seller/productOrders', function () {
     SellerController::productOrders();
 });
+
+$router->get('/seller/orders', function () {
+    SellerController::getOrdersPage();
+});
+
+$router->post('/seller/orders', function () {
+    SellerController::orders();
+});

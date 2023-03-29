@@ -30,32 +30,44 @@ class SellerController
             return 'allowed';
         }
     }
+
     static function getDashBoardPage()
     {
         self::authCheck();
         include('views/seller/dashboard.php');
     }
+
     static function getLoginPage()
     {
         self::authCheck();
         include('views/seller/login.php');
     }
+
     static function getSignUpPage()
     {
         self::authCheck();
 
         include('views/seller/signup.php');
     }
+
     static function getChangePasswordPage()
     {
         self::authCheck();
 
         include('views/seller/change_password.php');
     }
+
     static function getForgotPasswordPage()
     {
         include('views/seller/forgot_password.php');
     }
+
+    static function getOrdersPage()
+    {
+        require_once('views/seller/product_orders.php');
+        exit;
+    }
+
     static function signUp()
     {
 
@@ -91,6 +103,7 @@ class SellerController
 
         echo json_encode($response);
     }
+
     static function login()
     {
 
@@ -252,6 +265,32 @@ class SellerController
             $result =  $productModel->productOrders($product_id);
 
             if ($result) {
+                $response->msg = 'Done';
+                $response->data = $result;
+            } else {
+                $response->msg = 'Error';
+                $response->data = 'Something Went Wrong !!!';
+            }
+       
+
+        echo json_encode($response);
+    }
+
+    static function orders()
+    {
+        $response = new stdClass();
+
+        $body =  file_get_contents('php://input');
+        $body = json_decode($body, true);
+
+        $curremt_index = $body['current_index'];
+        $row_count = $body['row_count'];
+
+            $sellerModel = new SellerModel();
+
+            $result =  $sellerModel->getOrders($_SESSION['id'],$curremt_index,$row_count);
+
+            if ($result!='error') {
                 $response->msg = 'Done';
                 $response->data = $result;
             } else {
