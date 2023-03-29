@@ -135,8 +135,8 @@ class UserController
 
         $user = $userModel->getUserByToken($token);
         if ($user) {
-            $_SESSION['id']=$user->id;
-            $_SESSION['forgot']=true;
+            $_SESSION['id'] = $user->id;
+            $_SESSION['forgot'] = true;
             require_once('views/user/change_password.php');
         } else {
             $message = "Invalid Credentials";
@@ -206,8 +206,8 @@ class UserController
                 $response->msg = "Done";
                 $response->data = "Can't Able to send Mail At This Time";
             }
-            
-            if(isset( $_SESSION['forgot'])){
+
+            if (isset($_SESSION['forgot'])) {
                 session_destroy();
             }
         } else {
@@ -473,6 +473,23 @@ class UserController
             $response->msg = 'Error';
             $response->data = "Something Went Wrong !!!";
         }
+
+        echo json_encode($response);
+    }
+
+    static function order()
+    {
+        $response = new stdClass();
+
+        $body =  file_get_contents('php://input');
+        $body = json_decode($body,true);
+
+        $userModel = new UserModel();
+
+        $result = $userModel->order($_SESSION['id'],$body['cart_id_list'],$body['address']);
+
+        $response->msg = 'Done';
+        $response->data = $result;
 
         echo json_encode($response);
     }

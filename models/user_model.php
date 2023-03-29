@@ -52,7 +52,7 @@ class UserModel
 
     public function getUser(string $email): User|NULL
     {
-        $ret = $this->db->select('users', ['email'=>$email]);
+        $ret = $this->db->select('users', ['email' => $email]);
 
         if ($ret) {
             $user = new User($ret[0]);
@@ -63,7 +63,7 @@ class UserModel
 
     public function getUserByID(string $id): User|NULL
     {
-        $ret = $this->db->select('users', ['user_id'=>$id]);
+        $ret = $this->db->select('users', ['user_id' => $id]);
 
         if ($ret) {
             $user = new User($ret[0]);
@@ -185,5 +185,36 @@ class UserModel
     public function getAddress(string $user_id)
     {
         return $this->db->select('address', ['user_id' => $user_id]);
+    }
+
+    public function order(string $user_id, array $cart_id_list, int $billing_address)
+
+    {
+        $result = [];
+        try {
+            $this->db->beginTransaction();
+            $order_insert =  $this->db->execute("INSERT INTO orders(user_id,billing_address,transaction_id) VALUES($user_id,$billing_address,121651) RETURNING order_id");
+            $order_id = $order_insert[0]['order_id']; 
+            for ($i = 0; $i < count($cart_id_list); $i++) {
+                $cart_result = $this->db->execute("SELECT * FROM cart JOIN products ON cart.product_id = products.product_id WHERE cart_id = '$cart_id_list[$i]'");
+
+                $cart = $cart_result[0];
+
+
+                $this->db->execute("UPDATE products SET stock = stock - {$cart['quantity']} WHERE product_id = {$cart['product_id']};");
+
+                $this->db->execute("INSERT INTO order_items(order_id,product_id,price,quantity,activity) VALUES($order_id,{$cart['product_id']},{$cart['price']},{$cart['quantity']},'{}');");
+
+                $this->db->execute("DELETE FROM cart WHERE cart_id = {$cart['cart_id']}");
+            }
+
+            $this->db->commitTransaction();
+        } catch (Exception $e) {
+            $this->db->rollBackTransaction();
+            $result[] = 'Error'.$e;
+        }
+
+        //    pg_query($this->db->connection,"COMMIT");
+        return $result;
     }
 }

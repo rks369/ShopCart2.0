@@ -82,3 +82,7 @@ $router->post('/addAddress', function () {
 $router->get('/getAddress', function () {
     UserController::getAddress();
 });
+
+$router->post('/order', function () {
+    UserController::order();
+});

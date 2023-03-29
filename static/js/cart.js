@@ -19,7 +19,7 @@ add_address.addEventListener("click", (event) => {
     add_address.innerHTML = "Add Address";
     billing_address.style["display"] = "block";
   } else {
-    if (billing_address.value.trim() == "") {
+    if (false) {
       alert("Please Ente A Billing Address");
     } else {
       fetch("addAddress", {
@@ -109,9 +109,10 @@ Order_now.addEventListener("click", () => {
     })
       .then((response) => response.json())
       .then((result) => {
-        if (result["msg"] == "Success") {
-          window.location.href = "/orderHistory";
-        } else {
+        if (result["msg"] == "Done") {
+          window.location.href = "/order_history";
+        } else if(result['msg']=="Error") {
+          
           alert("can't Place Order");
         }
         console.log(result);
@@ -281,10 +282,11 @@ function createCartItem(cartItem) {
   div2.appendChild(buyNow);
 
   buyNow.addEventListener("click", () => {
-    if (billing_address.value.trim() != "") {
+    console.log()
+    if (true) {
       let reqObj = {
-        cart_id_list: [cartItem.cid],
-        address: { address: billing_address.value.trim() },
+        cart_id_list: [cartItem.cart_id],
+        address: 16,
       };
       console.log(reqObj);
       fetch("/order", {
@@ -296,10 +298,10 @@ function createCartItem(cartItem) {
       })
         .then((response) => response.json())
         .then((result) => {
-          if (result["msg"] == "Success") {
-            window.location.href = "/orderHistory";
-          } else {
-            alert("can't Place Order");
+          if (result["msg"] == "Done") {
+            window.location.href = "/order_history";
+          } else if(result['msg']=="Error") {
+            alert(result['data']);
           }
           console.log(result);
         });
