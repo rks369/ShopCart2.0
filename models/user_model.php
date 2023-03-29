@@ -211,10 +211,44 @@ class UserModel
             $this->db->commitTransaction();
         } catch (Exception $e) {
             $this->db->rollBackTransaction();
-            $result[] = 'Error'.$e;
+            $result[] = 'Error';
         }
 
-        //    pg_query($this->db->connection,"COMMIT");
         return $result;
     }
+
+    public function orderHistory(string $user_id)
+
+    {
+        $result = [];
+     
+        try{
+
+           $result= $this->db->execute("SELECT * FROM ORDERS JOIN address ON orders.billing_address = address.address_id WHERE orders.user_id = $user_id;");
+           
+           return $result;
+        }catch(Exception $e)
+        {
+            return  false;
+        }
+
+    }
+
+    public function orderDetails(string $order_id)
+
+    {
+        $result = [];
+     
+        try{
+
+           $result= $this->db->execute("SELECT * FROM order_items JOIN products ON order_items.product_id = products.product_id WHERE order_id = $order_id;");
+           
+           return $result;
+        }catch(Exception $e)
+        {
+            return  false;
+        }
+
+    }
+
 }

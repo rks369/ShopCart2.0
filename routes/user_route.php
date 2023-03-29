@@ -35,6 +35,14 @@ $router->get('/order_history', function () {
     UserController::getOrderHistoryPage();
 });
 
+$router->get('/orderHistoryList', function () {
+    UserController::getOrderHistory();
+});
+
+$router->post('/orderDetails',function(){
+    UserController::getOrderDetails();
+});
+
 $router->post('/signup', function () {
     UserController::signUp();
 });

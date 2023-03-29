@@ -494,6 +494,50 @@ class UserController
         echo json_encode($response);
     }
 
+    static function getOrderHistory()
+    {
+        $response = new stdClass();
+
+        $userModel = new UserModel();
+
+        $result = $userModel->orderHistory($_SESSION['id']);
+        if($result)
+        {
+            $response->msg = 'Done';
+            $response->data = $result;
+        }else{
+         
+            $response->msg = 'Error';
+            $response->data = 'Something Went Wrong !!!';   
+        }
+
+        echo json_encode($response);
+    }
+
+    static function getOrderDetails()
+    {
+        $response = new stdClass();
+
+        $body =  file_get_contents('php://input');
+        $body = json_decode($body,true);
+
+        $userModel = new UserModel();
+
+
+        $result = $userModel->orderDetails($body['order_id']);
+        if($result)
+        {
+            $response->msg = 'Done';
+            $response->data = $result;
+        }else{
+         
+            $response->msg = 'Error';
+            $response->data = 'Something Went Wrong !!!';   
+        }
+
+        echo json_encode($response);
+    }
+
     static function logout()
     {
         session_destroy();

@@ -14,6 +14,7 @@ function getOrderHistory() {
   fetch("/orderHistoryList")
     .then((response) => response.json())
     .then((result) => {
+      console.log(result);
       orders = result["data"];
       for (let i = 0; i < orders.length; i++) {
         createOrdersTile(orders[i]);
@@ -35,7 +36,7 @@ function createOrdersTile(order) {
   div1.appendChild(order_time);
 
   const address = document.createElement("p");
-  address.innerHTML = JSON.parse(order["billing_address"])["address"];
+  address.innerHTML = order['address'];
   div1.appendChild(address);
 
   const div2 = document.createElement("div");
@@ -56,6 +57,7 @@ function createOrdersTile(order) {
     })
       .then((response) => response.json())
       .then((result) => {
+        console.log(result);
         let  total =0;
         popup.style["display"] = "block";
         const orderItemList = result["data"];
@@ -84,7 +86,7 @@ function createOrderItemTile(orderItem){
     const productsImg = document.createElement("img");
     productsImg.classList.add("item");
     productsImg.classList.add("cart_product_img");
-    productsImg.src = orderItem.image;
+    productsImg.src = 'uploads/'+orderItem.imageurl;
   
     const div1 = document.createElement("div");
     div1.classList.add("item");
@@ -117,16 +119,16 @@ function createOrderItemTile(orderItem){
     qunatity.innerHTML =`Qunatity :  ${orderItem.quantity}`;
     div2.appendChild(qunatity)
 
-    const statusList = document.createElement('ul');
+    // const statusList = document.createElement('ul');
 
 
-    let statusArray= JSON.parse(orderItem.activity);
-    statusArray.forEach(status => {
-      let li = document.createElement('li');
-      li.innerHTML = status.title+ new Date(status.time).toLocaleDateString();
-      statusList.appendChild(li)
-    });
-    div2.appendChild(statusList);
+    // let statusArray= JSON.parse(orderItem.activity);
+    // statusArray.forEach(status => {
+    //   let li = document.createElement('li');
+    //   li.innerHTML = status.title+ new Date(status.time).toLocaleDateString();
+    //   statusList.appendChild(li)
+    // });
+    // div2.appendChild(statusList);
   
     div2.appendChild(document.createElement("br"));
     orderItemCard.appendChild(productsImg);

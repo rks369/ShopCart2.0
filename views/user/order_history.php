@@ -19,6 +19,6 @@ include('views/partials/header.php'); ?>
 </div>
 
 
-<script src="order_history.js"></script>
+<script src="static/js/order_history.js"></script>
 <?php
 include('views/partials/tail.php');
