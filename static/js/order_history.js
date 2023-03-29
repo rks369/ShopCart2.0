@@ -119,16 +119,16 @@ function createOrderItemTile(orderItem){
     qunatity.innerHTML =`Qunatity :  ${orderItem.quantity}`;
     div2.appendChild(qunatity)
 
-    // const statusList = document.createElement('ul');
+    const statusList = document.createElement('ul');
 
 
-    // let statusArray= JSON.parse(orderItem.activity);
-    // statusArray.forEach(status => {
-    //   let li = document.createElement('li');
-    //   li.innerHTML = status.title+ new Date(status.time).toLocaleDateString();
-    //   statusList.appendChild(li)
-    // });
-    // div2.appendChild(statusList);
+    let statusArray= JSON.parse(orderItem.activity);
+    statusArray.forEach(status => {
+      let li = document.createElement('li');
+      li.innerHTML = status.title+ new Date(status.time).toLocaleDateString();
+      statusList.appendChild(li)
+    });
+    div2.appendChild(statusList);
   
     div2.appendChild(document.createElement("br"));
     orderItemCard.appendChild(productsImg);
