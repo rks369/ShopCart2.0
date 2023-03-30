@@ -1,9 +1,11 @@
 <?php
 require_once('controllers/user_controller.php');
+require_once('controllers/seller_controller.php');
 
 include_once('services/request.php');
 include_once('services/router.php');
 session_start();
+
 if(isset($_SERVER['PATH_INFO']))
 {
 
@@ -15,6 +17,15 @@ if(isset($_SERVER['PATH_INFO']))
             exit;
         }else if($_SERVER['PATH_INFO']=='/forgotPasswordUrl'){
             UserController::verifyForgotPasswordLink();
+            exit;
+        }
+  
+        if($_SERVER['PATH_INFO']=='/seller/verifyEmail')
+        {
+            SellerController::verifyEmial();   
+            exit;
+        }else if($_SERVER['PATH_INFO']=='/seller/forgotPasswordUrl'){
+            SellerController::verifyForgotPasswordLink();
             exit;
         }
     } 

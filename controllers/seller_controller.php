@@ -75,7 +75,7 @@ class SellerController
 
         $body =  file_get_contents('php://input');
         $body = json_decode($body, true);
-
+        $body['token'] = time();
         $body = new  Seller($body);
 
         $sellerModel = new SellerModel();
@@ -88,16 +88,29 @@ class SellerController
             $response->data = 'User Already Exits!!!';
         } else {
 
-            $result = $sellerModel->addSeller($body->toArray());
-            if ($result) {
-                $_SESSION['id'] = '-1';
-                $_SESSION['name'] = $body->seller_name;
-                $_SESSION['role'] = 'seller';
-                $response->msg = 'Done';
-                $response->data = 'Seller Added Sucessfully!!!';
+            $mailBody = <<<TEXT
+            <h1>Verify Your Mail First !!!</h1?
+
+            <h3><a href='http://localhost:8000/seller/verifyEmail?token=${userDetails['token']}' >Verify</a></h3>
+        TEXT;
+
+            $isSent = sendMail($sellerModel['email'], $sellerModel['name'], 'Verify your Email !!!', $mailBody);
+
+            if ($isSent) {
+                $result = $sellerModel->addSeller($body->toArray());
+                if ($result) {
+                    $_SESSION['id'] = '-1';
+                    $_SESSION['name'] = $body->seller_name;
+                    $_SESSION['role'] = 'seller';
+                    $response->msg = 'Done';
+                    $response->data = 'Seller Added Sucessfully!!!';
+                } else {
+                    $response->msg = 'Error';
+                    $response->data = 'Something Went Wrong !!!';
+                }
             } else {
                 $response->msg = 'Error';
-                $response->data = 'Something Went Wrong !!!';
+                $response->data = "Can't Able To Send Mail At This time.Please Try After Sometime";
             }
         }
 
@@ -136,6 +149,130 @@ class SellerController
         echo json_encode($response);
     }
 
+
+    static function forgotPassword()
+    {
+
+        $response = new stdClass();
+
+        $body = file_get_contents('php://input');
+        $body = json_decode($body, true);
+
+        $sellerModel = new SellerModel();
+        $seller = $sellerModel->getSeller($body['email']);
+        if ($seller) {
+
+            $newToken = time();
+
+            $updateToken = $sellerModel->updaetToken($seller->seller_id, $newToken);
+            if ($updateToken) {
+                $mailBody = <<<TEXT
+                <h1>Reset Your Password!!</h1?
+    
+                <h3><a href='http://localhost:8000/seller/forgotPasswordUrl?token=${newToken}' >Reset</a></h3>
+            TEXT;
+                $isSent = sendMail($seller->email, $seller->seller_name, 'Reset your Password!!!', $mailBody);
+
+                if ($isSent) {
+                    $response->msg = "Done";
+                    $response->data = "Password Changed Sucessfully !!!";
+                } else {
+                    $response->msg = "Done";
+                    $response->data = "Can't Able to send Mail At This Time";
+                }
+            } else {
+                $response->msg = "Error";
+                $response->data = "Something went Wrong!!!";
+            }
+        } else {
+            $response->msg = "Error";
+            $response->data = "No Account Found With This Email !!!";
+        }
+
+        echo json_encode($response);
+    }
+
+    static function changePassword()
+    {
+
+        $response = new stdClass();
+
+        $body = file_get_contents('php://input');
+        $body = json_decode($body, true);
+
+        $sellerModel = new SellerModel();
+        
+        $seller = $sellerModel->getSellerByID($_SESSION['id']);
+        $result = $sellerModel->changePassword($_SESSION['id'], $body['password']);
+        if ($result) {
+            $mailBody = <<<TEXT
+            <h1>Password Changed Sucessfully !!!</h1>
+
+            <h3><a href='login' >Login</a></h3>
+        TEXT;
+
+            $isSent = sendMail($seller->email, $seller->seller_name, 'Password Chnaged Sucessfully !!!', $mailBody);
+
+            if ($isSent) {
+                $response->msg = "Done";
+                $response->data = "Password Changed Sucessfully !!!";
+            } else {
+                $response->msg = "Done";
+                $response->data = "Can't Able to send Mail At This Time";
+            }
+
+            if (isset($_SESSION['forgot'])) {
+                session_destroy();
+            }
+        } else {
+            $response->msg = "Error";
+            $response->data = "Password Not Changed !!!";
+        }
+
+        echo json_encode($response);
+    }
+
+    static function verifyEmial()
+    {
+        $token = $_GET['token'];
+
+        $sellerModel = new SellerModel();
+
+        $seller = $sellerModel->getSellerByToken($token);
+        $message = '';
+        if ($seller) {
+            $result = $sellerModel->updateStatus($seller->seller_id, 1);
+            if ($result) {
+                
+                $message = "Mail Is Verified";
+            } else {
+                $message = "Something Went Wrong";
+            }
+        } else {
+            $message = "Invalid Credentials";
+        }
+
+        require_once('views/seller/verify_email.php');
+    }
+
+    static function verifyForgotPasswordLink()
+    {
+        $token = $_GET['token'];
+
+        $sellerModel = new SellerModel();
+
+        $seller = $sellerModel->getSellerByToken($token);
+        if ($seller) {
+            $_SESSION['id'] = $seller->seller_id;
+            $_SESSION['forgot'] = true;
+            require_once('views/seller/change_password.php');
+        } else {
+            session_destroy();
+            $message = "Invalid Credentials";
+            require_once('views/seller/verify_email.php');
+        }
+    }
+
     static function addProduct()
     {
         $response = new stdClass();
@@ -168,8 +305,7 @@ class SellerController
 
         $body = $_POST;
         $product_id = $_POST['product_id'];
-        if(isset($_FILES['image']))
-        {
+        if (isset($_FILES['image'])) {
             $file = $_FILES['image'];
             $file['name'] = $_SESSION['id'] . time() . '.png';
             $body['imageurl'] = $file['name'];
@@ -179,7 +315,7 @@ class SellerController
         $product = new Product($body);
 
         $productModel = new ProductModel();
-        $productModel->editProduct($product_id,$product->getupdateArray());
+        $productModel->editProduct($product_id, $product->getupdateArray());
 
         if ($productModel) {
             $response->msg = 'Done';
@@ -204,7 +340,7 @@ class SellerController
         if (self::authCheckMsg() == 'allowed') {
             $productModel = new ProductModel();
 
-            $productList =  $productModel->getSellerProducts($curremt_index,$count);
+            $productList =  $productModel->getSellerProducts($curremt_index, $count);
 
             if (count($productList) == 0) {
                 $response->msg = 'Error';
@@ -234,7 +370,7 @@ class SellerController
         if (self::authCheckMsg() == 'allowed') {
             $productModel = new ProductModel();
 
-            $result =  $productModel->updateStatus($product_id,$status);
+            $result =  $productModel->updateStatus($product_id, $status);
 
             if ($result == 'Sucess') {
                 $response->msg = 'Done';
@@ -260,18 +396,18 @@ class SellerController
 
         $product_id = $body['product_id'];
 
-            $productModel = new ProductModel();
+        $productModel = new ProductModel();
 
-            $result =  $productModel->productOrders($product_id);
+        $result =  $productModel->productOrders($product_id);
 
-            if ($result) {
-                $response->msg = 'Done';
-                $response->data = $result;
-            } else {
-                $response->msg = 'Error';
-                $response->data = 'Something Went Wrong !!!';
-            }
-       
+        if ($result) {
+            $response->msg = 'Done';
+            $response->data = $result;
+        } else {
+            $response->msg = 'Error';
+            $response->data = 'Something Went Wrong !!!';
+        }
+
 
         echo json_encode($response);
     }
@@ -286,18 +422,18 @@ class SellerController
         $curremt_index = $body['current_index'];
         $row_count = $body['row_count'];
 
-            $sellerModel = new SellerModel();
+        $sellerModel = new SellerModel();
 
-            $result =  $sellerModel->getOrders($_SESSION['id'],$curremt_index,$row_count);
+        $result =  $sellerModel->getOrders($_SESSION['id'], $curremt_index, $row_count);
 
-            if ($result!='error') {
-                $response->msg = 'Done';
-                $response->data = $result;
-            } else {
-                $response->msg = 'Error';
-                $response->data = 'Something Went Wrong !!!';
-            }
-       
+        if ($result != 'error') {
+            $response->msg = 'Done';
+            $response->data = $result;
+        } else {
+            $response->msg = 'Error';
+            $response->data = 'Something Went Wrong !!!';
+        }
+
 
         echo json_encode($response);
     }
@@ -312,18 +448,18 @@ class SellerController
         $order_item_id = $body['order_item_id'];
         $status = json_encode($body['status']);
 
-            $sellerModel = new SellerModel();
+        $sellerModel = new SellerModel();
 
-            $result =  $sellerModel->updateOrderStatus($order_item_id,$status);
+        $result =  $sellerModel->updateOrderStatus($order_item_id, $status);
 
-            if ($result!='error') {
-                $response->msg = 'Done';
-                $response->data = $result;
-            } else {
-                $response->msg = 'Error';
-                $response->data = 'Something Went Wrong !!!';
-            }
-       
+        if ($result != 'error') {
+            $response->msg = 'Done';
+            $response->data = $result;
+        } else {
+            $response->msg = 'Error';
+            $response->data = 'Something Went Wrong !!!';
+        }
+
 
         echo json_encode($response);
     }

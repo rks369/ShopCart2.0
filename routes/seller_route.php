@@ -18,8 +18,16 @@ $router->get('/seller/change_password', function () {
     SellerController::getChangePasswordPage();
 });
 
+$router->post('/seller/change_password', function () {
+    SellerController::changePassword();
+});
+
 $router->get('/seller/forgot_password', function () {
     SellerController::getForgotPasswordPage();
+});
+
+$router->post('/seller/forgot_password', function () {
+    SellerController::forgotPassword();
 });
 
 $router->post('/seller/signup', function () {

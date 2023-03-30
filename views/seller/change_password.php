@@ -33,6 +33,6 @@ include('views/partials/seller_header.php'); ?>
         <br>
     </div>
 </div>
-<script src="/change_password.js"></script>
+<script src="../../static/js/seller_change_password.js"></script>
 <?php
 include('views/partials/tail.php');

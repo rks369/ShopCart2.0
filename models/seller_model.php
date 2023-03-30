@@ -71,6 +71,19 @@ class SellerModel
         return NULL;
     }
 
+    
+    public function getSellerByID(string $id): Seller|NULL
+    {
+        $ret = $this->db->select('sellers', ['seller_id' => $id]);
+
+        if ($ret) {
+            $user = new Seller($ret[0]);
+            return $user;
+        }
+        return NULL;
+    }
+
+
     public function getOrders(string $seller_id,int $current_index,int $row_count)
     {
 
@@ -94,4 +107,34 @@ class SellerModel
         return 'error';
        }
     }
+
+    public function getSellerByToken(string $token): Seller|NULL
+    {
+        $condition = array();
+
+        $condition['token'] = $token;
+        $ret = $this->db->select('sellers', $condition);
+
+        if ($ret) {
+            $user = new Seller($ret[0]);
+            return $user;
+        }
+        return NULL;
+    }
+
+    public function updateStatus(string $seller_id, string $status)
+    {
+        return $this->db->update('sellers', ['status' => $status], ['seller_id' => $seller_id]);
+    }
+
+    public function updaetToken(string $seller_id, string $token)
+    {
+        return $this->db->update('sellers', ['token' => $token], ['seller_id' => $seller_id]);
+    }
+
+    public function changePassword(string $seller_id, string $password)
+    {
+        return $this->db->update('sellers', ['password' => $password], ['seller_id' => $seller_id]);
+    }
+
 }
