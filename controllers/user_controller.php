@@ -78,7 +78,7 @@ class UserController
             $mailBody = <<<TEXT
                 <h1>Verify Your Mail First !!!</h1?
     
-                <h3><a href='http://localhost:8000/verifyEmail?token=${userDetails['token']}' >Verify</a></h3>
+                <h3><a href='http://localhost:8000/verifyEmail?token={$userDetails['token']}' >Verify</a></h3>
             TEXT;
 
             $isSent = sendMail($userDetails['email'], $userDetails['name'], 'Verify your Email !!!', $mailBody);
@@ -237,7 +237,7 @@ class UserController
                 $mailBody = <<<TEXT
                 <h1>Reset Your Password!!</h1?
     
-                <h3><a href='http://localhost:8000/forgotPasswordUrl?token=${newToken}' >Reset</a></h3>
+                <h3><a href='http://localhost:8000/forgotPasswordUrl?token={$newToken}' >Reset</a></h3>
             TEXT;
                 $isSent = sendMail($user->email, $user->name, 'Reset your Password!!!', $mailBody);
 
