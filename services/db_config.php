@@ -9,7 +9,6 @@ class DataBase
         $port        = "port = 5432";
         $dbname      = "dbname = shopcart";
         $credentials = "user = postgres password=123456";
-
         $this->connection = pg_connect("$host $port $dbname $credentials");
     }
 
