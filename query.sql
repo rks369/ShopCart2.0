@@ -32,3 +32,7 @@ CREATE TABLE CART (cart_id SERIAL PRIMARY KEY,
 user_id INTEGER REFERENCES users(user_id),
 product_id INTEGER REFERENCES products(product_id),
 quantity INTEGER CHECK(quantity>0) DEFAULT(1));
+
+CREATE TABLE address(address_id SERIAL PRIMARY KEY,
+user_id INTEGER REFERENCES users(user_id),
+address VARCHAR NOT NULL);

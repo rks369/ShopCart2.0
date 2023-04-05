@@ -202,7 +202,7 @@ class UserModel
             $activity = json_encode($activity);
 
             $this->db->beginTransaction();
-            $order_insert =  $this->db->execute("INSERT INTO orders(user_id,billing_address,transaction_id) VALUES($user_id,$billing_address,121651) RETURNING order_id");
+            $order_insert =  $this->db->execute("INSERT INTO orders(user_id,billing_address) VALUES($user_id,$billing_address) RETURNING order_id");
             $order_id = $order_insert[0]['order_id']; 
             for ($i = 0; $i < count($cart_id_list); $i++) {
                 $cart_result = $this->db->execute("SELECT * FROM cart JOIN products ON cart.product_id = products.product_id WHERE cart_id = '$cart_id_list[$i]'");
