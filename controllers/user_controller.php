@@ -83,7 +83,7 @@ class UserController
 
             $isSent = sendMail($userDetails['email'], $userDetails['name'], 'Verify your Email !!!', $mailBody);
 
-            if ($isSent) {
+            if (!$isSent) {
                 $result = $userModel->addUser($userDetails);
                 if ($result) {
                     $_SESSION['id'] =  '-1';

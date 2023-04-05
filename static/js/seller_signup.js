@@ -106,7 +106,7 @@ signUpBtn.addEventListener("click", function (event) {
         if (result["msg"]=='Error') {
           errorSpan.innerHTML = result["data"];
         } else if (result["msg"] == "Done") {
-          window.location.href = "./addProduct";
+          window.location.href = "./";
         }
       });
   }

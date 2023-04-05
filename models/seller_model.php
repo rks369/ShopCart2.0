@@ -9,6 +9,7 @@ class Seller
     public string $bussiness_name;
     public string $email;
     public string $mobile;
+    public string $token;
     public string $gst;
     public string $address;
     public string $password;
@@ -22,7 +23,9 @@ class Seller
         $this->bussiness_name = $data['bussiness_name'] ?? '';
         $this->email = $data['email'] ?? '';
         $this->mobile = $data['mobile'] ?? '';
+        $this->address = $data['address'] ?? '';
         $this->gst = $data['gst'] ?? '';
+        $this->token = $data['token'] ?? '';
         $this->password = $data['password'] ?? '';
         $this->status = $data['status'] ?? '';
     }
@@ -36,6 +39,7 @@ class Seller
         $userDetails['bussiness_name'] = $this->bussiness_name;
         $userDetails['email'] = $this->email;
         $userDetails['mobile'] = $this->mobile;
+        $userDetails['address'] = $this->address;
         $userDetails['gst'] = $this->gst;
         $userDetails['password'] = $this->password;
         return $userDetails;

@@ -45,7 +45,6 @@ class SellerController
 
     static function getSignUpPage()
     {
-        self::authCheck();
 
         include('views/seller/signup.php');
     }
@@ -91,10 +90,10 @@ class SellerController
             $mailBody = <<<TEXT
             <h1>Verify Your Mail First !!!</h1?
 
-            <h3><a href='http://localhost:8000/seller/verifyEmail?token=${userDetails['token']}' >Verify</a></h3>
+            <h3><a href='http://localhost:8000/seller/verifyEmail?token=$body->token' >Verify</a></h3>
         TEXT;
 
-            $isSent = sendMail($sellerModel['email'], $sellerModel['name'], 'Verify your Email !!!', $mailBody);
+            $isSent = sendMail($body->email, $body->seller_name, 'Verify your Email !!!', $mailBody);
 
             if ($isSent) {
                 $result = $sellerModel->addSeller($body->toArray());
