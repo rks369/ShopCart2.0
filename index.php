@@ -2,7 +2,7 @@
 require_once('controllers/user_controller.php');
 require_once('controllers/seller_controller.php');
 
-include_once('services/request.php');
+include_once('services/request.php'); 
 include_once('services/router.php');
 session_start();
 
