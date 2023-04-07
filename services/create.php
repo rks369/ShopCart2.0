@@ -21,7 +21,7 @@ try {
 
     // Create a PaymentIntent with amount and currency
     $paymentIntent = \Stripe\PaymentIntent::create([
-        'amount' => calculateOrderAmount($jsonObj->items),
+        'amount' =>1000,
         'currency' => 'inr',
         'automatic_payment_methods' => [
             'enabled' => true,
